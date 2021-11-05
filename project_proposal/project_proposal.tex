@@ -1,0 +1,98 @@
+\documentclass[fontsize=11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[margin=1in]{geometry}
+\usepackage{indentfirst}
+
+\usepackage{listings}
+\lstset{
+basicstyle=\small\ttfamily,
+columns=flexible,
+breaklines=true
+}
+
+\newcommand{\quotes}[1]{``#1''}
+
+\setlength{\parindent}{4em}
+\setlength{\parskip}{0.5em}
+\renewcommand{\baselinestretch}{1.2}
+
+
+
+
+\title{CSC110 Project: \textbf{Effect of COVID-19 on Crime in Canada}}
+\author{Wangzheng Jiang\\
+		Khushil Nimesh Nagda\\
+		Nicholas Harold Poon\\
+		Raghav Rengarajan Srinivasan}
+\date{\today}
+
+\begin{document}
+\maketitle
+\section{Problem Description and Research Question}
+\par
+During the beginning of the COVID-19 pandemic, a newfound fear of catching the virus caused many people to become increasingly conservative regarding their usual activities. Going to public places only increased the risk of acquiring COVID-19. As a result, the general population was advised to stay indoors as much as possible and not to go to public gatherings and events where the virus may spread. In addition, during this period of time, public health measures by the Canadian government caused many businesses and organizations to begin implementing stricter social distancing and general operating procedures to manage the spread of COVID-19 across the population. For instance, restaurants began limiting the number of people able to eat indoors, and face masks have become a necessity to enter almost any public building. The provincial government even went as far as shutting down non-essential businesses and putting the whole province into lockdown to ensure that the virus was contained as much as possible.
+
+Similarly, measures such as the requirement for proof of vaccinations for many indoor facilities and event spaces became prevalent strictly as a result of the COVID-19 pandemic. For this project, our group aims to investigate how the COVID-19 pandemic and the public health measures initiated by the government have impacted crime and calls for service (calling the police, EMT, etc.) in Canada. We are particularly interested in exploring the effect of the pandemic on crime because this topic is one that does not seem to be super prevalent in the media. Typically, we tend to only hear about radical cases of crime from the news (terrorism, extreme violence, abuse, etc), but this does not really give us a sense of the trend in the amount of crime in general, which we believe is important to analyze. Therefore, our research question is, “\textbf{How has COVID-19 and the Canadian government’s response to the pandemic changed the amount of (reported) crime in Canada?}” Our group hypothesizes that as a result of this trend of decreasing activity outdoors and in public spaces, organized-crime activities during the COVID-19 pandemic will have decreased, which may be reflected by the computations that we plan to perform on our data in order to analyze this trend.
+\section{Dataset Description}
+Both of our datasets on crime and COVID are from \textbf{Statistics Canada} and are in \textbf{CSV} format. In the dataset on selected police-reported crime and calls for service during the COVID-19 pandemic\cite{crime}, we are provided with information about the number of 911 calls for each type of service required, for each month from March 2019 to August 2020. This includes calls for enforcing physical crimes and requests for help with mental health and suicide prevention. For this project, we will only be focusing on the 911 calls that relate to physical crimes. Additionally, there is enough data before the pandemic to compare the change in crime before and during the pandemic.
+
+The second data set\cite{covid} that we will use provides us with a daily update about the number of COVID-19 cases in each province and in Canada as a whole. This daily update starts on January 31, 2021 and is still continuously being updated. It is important to note that in the beginning of the dataset, there is no update on the number of COVID-19 cases everyday, probably because there were not new cases every day at the start of the pandemic.
+
+In addition, there is an extra dataset from the \textbf{Canadian Institute for Health Information} in \textbf{Excel} format\cite{intervention}, in which are dates on which different provinces/territories in Canada started/stopped enforcing restrictions on certain outdoor activities, which can be used as reference dates when we see drastic changes in COVID case numbers.
+\section{Conputational Plan}
+Since the relationship between the situation of the pandemic and public security in each province/ territory could be different, we will need to first separate out data for each province/territory for both Crime and COVID data sets with keyword filtering, and put them into separate Pandas Data Frames (in the \verb+pandas+ library) to be processed separately. We will also formulate a result from the dataset for Canada as a whole, in which case we would need to aggregate the data from the different provinces into one dataset. We are storing our data in Pandas Data Frames because not only are Data Frames the optimal input type for other libraries that do statistical calculations like \verb+statsmodels+ and \verb+numpy+, it also built-in functions to read directly from both CSV files (\verb+pandas.read_csv+) and Excel files (\verb+pandas.read_excel+), not to mention it also has functions that can clean up our data.
+
+Our crime data is based on monthly cases and our covid cases data is based on daily cases. In order to effectively compare and draw conclusions from both data sets, we will use keyword filtering and addition to accumulate our covid data so that it shows monthly cases instead of daily cases. For this study, we will be using active cases in each province per month.
+
+We also plan to categorize the specific crimes into different categories (such as \textit{violent-public}, \textit{non-violent-public}, \textit{violent-private}, \textit{non-violent-private}) with keyword filtering, and process each type of crime separately as well in order to provide more detailed conclusions and insight.
+
+After trimming our data as stated above, we will plot our data with \verb+matplotlib+ using time as an axis and months as steps, to show the amount of a certain type of crime committed in a certain province/territory in respect to time, along with current active covid cases with respect to time, and make one graph for each province/territory, as well as for Canada as a whole. We are using \verb+matplotlib+ for its robust graph customizability (including the ability to create subplots, customize axes, labels, colors, etc.) for a clearer and cleaner visual representation of our data.
+
+Then in order to find a correlation (or lack thereof) between crime and covid cases, we will apply different statistical models to both datasets as bivariate data to figure out the relationship between the two for each territory. In order to accomplish this we will be using the library \verb+statsmodels+, which can fit different statistical models such as linear, logarithmic, and more, using functions such as  \verb+statsmodels.api.OLS.from_formula+, onto our data and return correlation coefficients, sum of squared residuals, and other important values to help us find the best fit for our data.
+
+In addition, because our crime data covers months before the pandemic, we will also be comparing crime before and after the pandemic hit, calculating regressions for both to see how the pandemic itself made an impact on crime rates.
+
+\begin{thebibliography}{9}
+	\bibitem{crime}
+	Selected Police-Reported Crime and Calls for Service during the COVID-19 Pandemic, Government of Canada, Statistics Canada, 22 Oct. 2021, \\
+	\verb+https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3510016901&pickMembers%5B0%5D=1.20+\\
+	\verb+&cubeTimeFrame.startMonth=01&cubeTimeFrame.startYear=2019&cubeTimeFrame.endMonth=10&+\\
+	\verb+cubeTimeFrame.endYear=2021&referencePeriods=20190101%2C20211001+
+	
+	\bibitem{covid}
+	Canada, Public Health Agency of. \quotes{Covid-19 Daily Epidemiology Update.} Canada.ca, 28 May 2021,\\
+	\verb+https://health-infobase.canada.ca/covid-19/epidemiological-summary-covid-19-cases.html#tiles+
+	
+	\bibitem{covidtravel}
+	Canada, Global Affairs. \quotes{Covid-19 Travel: Checklists for Requirements and Exemptions.} Travel Restrictions in Canada,  Travel.gc.ca, 25 Oct. 2021,\\
+	\verb+https://travel.gc.ca/travel-covid/travel-restrictions/exemptions+
+	
+	\bibitem{health1}
+	Canada, Public Health Agency of. \quotes{Government of Canada.} Canada.ca, / Gouvernement Du Canada,\\
+	\verb+https://www.canada.ca/en/public-health/services/diseases/coronavirus-disease-covid-19/+\\
+	\verb+epidemiological-economic-research-data/mathematical-modelling.html#c+
+	
+	\bibitem{health2}
+	Canada, Public Health Agency of. \quotes{Government of Canada.} Canada.ca, / Gouvernement Du Canada, 5 Nov. 2021,\\
+	\verb+https://www.canada.ca/en/public-health/services/diseases/coronavirus-disease-covid-19/+\\
+	\verb+epidemiological-economic-research-data/mathematical-modelling.html+
+	
+	\bibitem{infobase}
+	\quotes{Public Health Infobase - Data on COVID-19 in Canada.} Open Government Portal, Public Health Agency of Canada,\\
+	\verb+https://open.canada.ca/data/en/dataset/261c32ab-4cfd-4f81-9dea-7b64065690dc+
+	
+	\bibitem{intervention}
+	\quotes{Covid-19 Intervention Timeline in Canada.} CIHI, Canadian Institute for Health Information,\\
+	\verb+https://www.cihi.ca/en/covid-19-intervention-timeline-in-canada+
+	
+	
+	
+\end{thebibliography}
+
+\end{document}
+
+
+
+
