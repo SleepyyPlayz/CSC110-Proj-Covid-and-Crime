@@ -5,7 +5,7 @@ import datetime
 class EmergencyCall:
     """A data type representing the specific 911 call.
 
-    This corresponds to one row of the data in police_data.csv with the irrelevant columns removed
+    Each instance corresponds to one row of data in police_data.csv with the irrelevant columns removed
 
     Attributes:
         - date: the date of the call
@@ -13,7 +13,8 @@ class EmergencyCall:
         - location: the location of the incident
 
     Representation Invariants:
-        - pass
+        - self.emergency != ''
+        - self.location != ''
     """
     date: datetime.date
     emergency: str
@@ -25,7 +26,42 @@ class EmergencyCall:
         self.location = location
 
 
-def read_covid_data(filename: str) -> list[list]:
+class CovidData:
+    """A data type representing the covid data for the day.
+
+    Each instance corresponds to one row of data in covid_data.csv
+
+    Attributes:
+        - date: the date of the data
+        - num_confirmed: the number of new confirmed cases on date for prov_terr
+        - num_deaths: the number of new covid related deaths on date for prov_terr
+        - num_active: the total number of active cases for prov_terr as of date
+        - prov_terr: the province or territory that corresponds with the covid data
+
+    Representation Invaraints:
+        - self.num_confirmed >= 0
+        - self.num_deaths >= 0
+        - self.num_active >= 0
+        - self.prov_terr in {'British Columbia', 'Alberta', 'Saskatchewan', 'Manitoba', 'Ontario', 'Quebec',
+        'Newfoundland & Labrador', 'New Brunswick', 'Nova Scotia', 'Prince Edward Island', 'Northwest Territories',
+        'Nunavut', 'Yukon'}
+    """
+    date: datetime.date
+    num_confirmed: int
+    num_deaths: int
+    num_active: int
+    prov_terr: str
+
+    def __init__(self, date: datetime.date, num_confirmed: int, num_deaths: int, num_active: int,
+                 prov_terr: str) -> None:
+        self.date = date
+        self.num_confirmed = num_confirmed
+        self.num_deaths = num_deaths
+        self.num_active = num_active
+        self.prov_terr = prov_terr
+
+
+def read_covid_data(filename: str) -> list[CovidData]:
     """Return the data table stored in the covid_data csv file with the given filename.
     The return value is a list of lists. The nested lists represent each row of necessary
     information.
@@ -55,10 +91,9 @@ def read_covid_data(filename: str) -> list[list]:
         # data = [ for row in reader]
 
 
-def read_police_data(filename: str) -> list[list]:
+def read_police_data(filename: str) -> list[EmergencyCall]:
     """Return the data table stored in the police_data csv file with the given filename.
-    The return value is a list of lists. The nested lists represent each row of necessary
-    information.
+    The return value is a list of EmergencyCall. Each EmergencyCall instance is a row of information.
     Preconditions:
       - filename refers to a valid csv file with headers
     """
