@@ -5,6 +5,19 @@ PROV_AND_TERR = {'British Columbia', 'Alberta', 'Saskatchewan', 'Manitoba', 'Ont
                  'Newfoundland & Labrador', 'New Brunswick', 'Nova Scotia', 'Prince Edward Island',
                  'Northwest Territories', 'Nunavut', 'Yukon'}
 
+DAYS_PER_MONTH = {1: 31,
+                  2: 28,
+                  3: 31,
+                  4: 30,
+                  5: 31,
+                  6: 30,
+                  7: 31,
+                  8: 31,
+                  9: 30,
+                  10: 31,
+                  11: 30,
+                  12: 31}
+
 
 class EmergencyCall:
     """A data type representing the specific 911 call.
@@ -48,19 +61,16 @@ class CovidData:
       - self.num_active >= 0
       - self.prov_terr in PROV_AND_TERR
     """
-    date: datetime.date
-    num_confirmed: int
-    num_deaths: int
-    num_active: int
     prov_terr: str
+    date: datetime.date
+    num_active: int
+    num_deaths: int
 
-    def __init__(self, date: datetime.date, num_confirmed: int, num_deaths: int, num_active: int,
-                 prov_terr: str) -> None:
-        self.date = date
-        self.num_confirmed = num_confirmed
-        self.num_deaths = num_deaths
-        self.num_active = num_active
+    def __init__(self, prov_terr: str, date: datetime.date, num_active: int, num_deaths: int) -> None:
         self.prov_terr = prov_terr
+        self.date = date
+        self.num_active = num_active
+        self.num_deaths = num_deaths
 
 
 def read_covid_data(filename: str) -> list[CovidData]:
@@ -70,27 +80,12 @@ def read_covid_data(filename: str) -> list[CovidData]:
     Preconditions:
       - filename refers to a valid csv file with headers
     """
-    # "open" is a builtin function that accesses a file on your computer,
-    # looking in the same folder as the current Python module.
-    # "with" is a special type of compound statement in Python that
-    # works with "open" to create a new variable "file" that you can use
-    # inside the with block to access the file.
     with open(filename) as file:
-        # This line creates a csv reader, which is a Python value that
-        # can read csv data from a given file (essentially splitting up the
-        # file into rows, and splitting each row by commas).
         reader = csv.reader(file)
 
-        # This line reads the first row of the csv file, which contains the headers.
-        # The result is a list of strings.
         headers = next(reader)
 
-        # This list comprehension reads each remaining row of the file,
-        # where each row is represented as a list of strings.
-        # The header row is *not* included in this list.
-
-        # comprehension converts rows into correct data type
-        # data = [ for row in reader]
+        return [CovidData(row[1], covid_data_str_to_date(row[3]), int(row[5]), int(row[7])) for row in reader]
 
 
 def read_police_data(filename: str) -> list[EmergencyCall]:
@@ -99,27 +94,12 @@ def read_police_data(filename: str) -> list[EmergencyCall]:
     Preconditions:
       - filename refers to a valid csv file with headers
     """
-    # "open" is a builtin function that accesses a file on your computer,
-    # looking in the same folder as the current Python module.
-    # "with" is a special type of compound statement in Python that
-    # works with "open" to create a new variable "file" that you can use
-    # inside the with block to access the file.
     with open(filename) as file:
-        # This line creates a csv reader, which is a Python value that
-        # can read csv data from a given file (essentially splitting up the
-        # file into rows, and splitting each row by commas).
         reader = csv.reader(file)
 
-        # This line reads the first row of the csv file, which contains the headers.
-        # The result is a list of strings.
         headers = next(reader)
 
-        # This list comprehension reads each remaining row of the file,
-        # where each row is represented as a list of strings.
-        # The header row is *not* included in this list.
 
-        # comprehension converts rows into correct data type
-        # data = [ for row in reader]
 
 
 def covid_data_str_to_date(date_str: str) -> datetime.date:
@@ -138,6 +118,11 @@ def covid_data_str_to_date(date_str: str) -> datetime.date:
     >>> covid_data_str_to_date('1999-12-31')
     datetime.date(1999, 12, 31)
     """
+    year = int(date_str[:4])
+    month = int(date_str[5:7])
+    day = int(date_str[8:])
+
+    return datetime.date(year, month, day)
 
 
 def police_data_str_to_date(date_str: str) -> datetime.date:
@@ -155,6 +140,14 @@ def police_data_str_to_date(date_str: str) -> datetime.date:
     >>> covid_data_str_to_date('1999-02')
     datetime.date(1999, 2, 28)
     """
+    year = int(date_str[:4])
+    month = int(date_str[5:7])
+    if month == 2 and year % 4 == 0:
+        day = 29
+    else:
+        day = DAYS_PER_MONTH[month]
+
+    return datetime.date(year, month, day)
 
 
 def filter_physical_crimes(data: list[EmergencyCall]) -> list[EmergencyCall]:
