@@ -1,9 +1,13 @@
 import csv
 import datetime
 
-PROV_AND_TERR = {'British Columbia', 'Alberta', 'Saskatchewan', 'Manitoba', 'Ontario', 'Quebec',
-                 'Newfoundland & Labrador', 'New Brunswick', 'Nova Scotia', 'Prince Edward Island',
-                 'Northwest Territories', 'Nunavut', 'Yukon'}
+PROV_AND_TERR = ['British Columbia', 'Alberta', 'Saskatchewan', 'Manitoba', 'Ontario', 'Quebec',
+                 'Newfoundland and Labrador', 'New Brunswick', 'Nova Scotia', 'Prince Edward Island',
+                 'Northwest Territories', 'Nunavut', 'Yukon']
+
+PROV_AND_TERR_KEYWORDS = ['British Columbia', 'Alberta', 'Saskatchewan', 'Manitoba', 'Ontario', 'Quebec',
+                          'Newfoundland', 'New Brunswick', 'Nova Scotia', 'Prince Edward Island',
+                          'Northwest Territories', 'Nunavut', 'Yukon']
 
 DAYS_PER_MONTH = {1: 31,
                   2: 28,
@@ -34,13 +38,13 @@ class EmergencyCall:
       - self.location != ''
     """
     date: datetime.date
-    emergency: str
     location: str
+    emergency: str
 
-    def __init__(self, date: datetime.date, emergency: str, location: str) -> None:
+    def __init__(self, date: datetime.date, location: str, emergency: str) -> None:
         self.date = date
-        self.emergency = emergency
         self.location = location
+        self.emergency = emergency
 
 
 class CovidData:
@@ -80,12 +84,18 @@ def read_covid_data(filename: str) -> list[CovidData]:
     Preconditions:
       - filename refers to a valid csv file with headers
     """
+    covid_data_so_far = []
+
     with open(filename) as file:
         reader = csv.reader(file)
 
-        headers = next(reader)
+        _ = next(reader)
 
-        return [CovidData(row[1], covid_data_str_to_date(row[3]), int(row[5]), int(row[7])) for row in reader]
+        for row in reader:
+            if row[1] in PROV_AND_TERR:
+                covid_data_so_far.append(CovidData(row[1], covid_data_str_to_date(row[3]), int(row[5]), int(row[7])))
+
+    return covid_data_so_far
 
 
 def read_police_data(filename: str) -> list[EmergencyCall]:
@@ -97,9 +107,9 @@ def read_police_data(filename: str) -> list[EmergencyCall]:
     with open(filename) as file:
         reader = csv.reader(file)
 
-        headers = next(reader)
+        _ = next(reader)
 
-
+        return [EmergencyCall(police_data_str_to_date(row[0]), det_prov_terr(row[1]), row[3]) for row in reader]
 
 
 def covid_data_str_to_date(date_str: str) -> datetime.date:
@@ -148,6 +158,24 @@ def police_data_str_to_date(date_str: str) -> datetime.date:
         day = DAYS_PER_MONTH[month]
 
     return datetime.date(year, month, day)
+
+
+def det_prov_terr(location: str) -> str:
+    """Return the province or territory based on location and Canada if it cannot be determined
+
+    Preconditions:
+      - len(location) != 0
+
+    >>> det_prov_terr("Royal Newfoundland Constabulary")
+    'Newfoundland and Labrador'
+    >>> det_prov_terr("Total, Selected police services")
+    'Canada'
+    """
+    for i in range(len(PROV_AND_TERR_KEYWORDS)):
+        if PROV_AND_TERR_KEYWORDS[i] in location:
+            return PROV_AND_TERR[i]
+
+    return "Canada"
 
 
 def filter_physical_crimes(data: list[EmergencyCall]) -> list[EmergencyCall]:
