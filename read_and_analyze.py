@@ -31,11 +31,11 @@ class EmergencyCall:
     Attributes:
       - date: the date of the call
       - emergency: the reason for the call
-      - location: the location of the incident
+      - location: the location of the incident (either a province, territory, or just Canada)
 
     Representation Invariants:
       - self.emergency != ''
-      - self.location != ''
+      - self.location in PROV_AND_TERR or self.location == "Canada"
     """
     date: datetime.date
     location: str
@@ -59,21 +59,21 @@ class CovidData:
         - num_confirmed: the number of new confirmed cases on date for prov_terr
         - num_deaths: the number of new covid related deaths on date for prov_terr
         - num_active: the total number of active cases for prov_terr as of date
-        - prov_terr: the province or territory that corresponds with the covid data
+        - location: the location that corresponds with the covid data (either a province, territory, or just Canada)
 
     Representation Invaraints:
       - self.num_confirmed >= 0
       - self.num_deaths >= 0
       - self.num_active >= 0
-      - self.prov_terr in PROV_AND_TERR
+      - self.location in PROV_AND_TERR or self.location == "Canada"
     """
-    prov_terr: str
+    location: str
     date: datetime.date
     num_active: int
     num_deaths: int
 
-    def __init__(self, prov_terr: str, date: datetime.date, num_active: int, num_deaths: int) -> None:
-        self.prov_terr = prov_terr
+    def __init__(self, location: str, date: datetime.date, num_active: int, num_deaths: int) -> None:
+        self.location = location
         self.date = date
         self.num_active = num_active
         self.num_deaths = num_deaths
@@ -94,7 +94,7 @@ def read_covid_data(filename: str) -> list[CovidData]:
         _ = next(reader)
 
         for row in reader:
-            if row[1] in PROV_AND_TERR:
+            if row[1] in PROV_AND_TERR or row[1] == "Canada":
                 covid_data_so_far.append(CovidData(row[1], covid_data_str_to_date(row[3]), int(row[5]), int(row[7])))
 
     return covid_data_so_far
@@ -114,11 +114,11 @@ def read_police_data(filename: str) -> list[EmergencyCall]:
 
         for row in reader:
             date = police_data_str_to_date(row[0])
-            prov_terr = det_prov_terr(row[1])
+            location = det_location(row[1])
             if row[11] == '':
-                emergency_call = EmergencyCall(date, prov_terr, row[3], 0)
+                emergency_call = EmergencyCall(date, location, row[3], 0)
             else:
-                emergency_call = EmergencyCall(date, prov_terr, row[3], int(row[11]))
+                emergency_call = EmergencyCall(date, location, row[3], int(row[11]))
 
             police_data_so_far.append(emergency_call)
 
@@ -173,15 +173,15 @@ def police_data_str_to_date(date_str: str) -> datetime.date:
     return datetime.date(year, month, day)
 
 
-def det_prov_terr(location: str) -> str:
+def det_location(location: str) -> str:
     """Return the province or territory based on location and Canada if it cannot be determined
 
     Preconditions:
       - len(location) != 0
 
-    >>> det_prov_terr("Royal Newfoundland Constabulary")
+    >>> det_location("Royal Newfoundland Constabulary")
     'Newfoundland and Labrador'
-    >>> det_prov_terr("Total, Selected police services")
+    >>> det_location("Total, Selected police services")
     'Canada'
     """
     for i in range(len(PROV_AND_TERR_KEYWORDS)):
@@ -204,22 +204,19 @@ def filter_physical_crimes(data: list[EmergencyCall]) -> list[EmergencyCall]:
     """
 
 
-def filter_crime_per_month(data: list[EmergencyCall], month: int, year: int) -> list[EmergencyCall]:
-    """Return a new list of EmergencyCall with only EmergencyCall corresponding to month, year
+def filter_data_by_month(data: list, location: str, month: int, year: int) -> list:
+    """Return a new list of data with only data corresponding to month, year for location
 
     Preconditions:
       - len(data) != 0
+      - location in PROV_AND_TERR or location == "Canada"
       - 1 <= month <= 12
       - year >= 0
     """
+    filtered_so_far = []
 
+    for info in data:
+        if info.date.month == month and info.date.year == year and info.location == location:
+            filtered_so_far.append(info)
 
-def filter_covid_data_per_month(data: list[CovidData], prov_terr: str, month: int, year: int) -> list[CovidData]:
-    """Return a new list of CovidData with only CovidData corresponding to month, year for prov_terr
-
-    Preconditions:
-      - len(data) != 0
-      - year >= 0
-      - 1 <= month <= 12
-      - prov_terr in PROV_AND_TERR
-    """
+    return filtered_so_far
