@@ -191,21 +191,18 @@ def filter_physical_crimes(data: list[EmergencyCall]) -> list[EmergencyCall]:
     """
 
 
-def filter_by_covid_case_per_month(data: list[CovidData], prov_terr: str, month: int, year: int) -> list[CovidData]:
-    """Return a new list of CovidData with only CovidData corresponding to month, year for prov_terr
+def filter_crime_per_month(data: list[EmergencyCall], month: int, year: int) -> list[EmergencyCall]:
+    """Return a new list of EmergencyCall with only EmergencyCall corresponding to month, year
 
     Preconditions:
       - len(data) != 0
-      - year >= 0
       - 1 <= month <= 12
-      - prov_terr in PROV_AND_TERR
+      - year >= 0
     """
 
 
-def calc_covid_case_per_month(data: list[CovidData], prov_terr: str, month: int, year: int) -> tuple[int, int]:
-    """Return a tuple of the total number of new confirmed covid cases in month, year, represented as an int,
-    for the given prov_terr and the total number of new covid related deaths in month, represented as an int, for the
-    given prov_terr
+def filter_covid_data_per_month(data: list[CovidData], prov_terr: str, month: int, year: int) -> list[CovidData]:
+    """Return a new list of CovidData with only CovidData corresponding to month, year for prov_terr
 
     Preconditions:
       - len(data) != 0
