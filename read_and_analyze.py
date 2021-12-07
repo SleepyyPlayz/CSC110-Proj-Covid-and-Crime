@@ -107,6 +107,7 @@ def read_police_data(filename: str) -> list[EmergencyCall]:
       - filename refers to a valid csv file with headers
     """
     police_data_so_far = []
+
     with open(filename) as file:
         reader = csv.reader(file)
 
@@ -116,10 +117,11 @@ def read_police_data(filename: str) -> list[EmergencyCall]:
             date = police_data_str_to_date(row[0])
             location = det_location(row[1])
             if row[11] == '':
-                emergency_call = EmergencyCall(date, location, row[3], 0)
+                incidences = 0
             else:
-                emergency_call = EmergencyCall(date, location, row[3], int(row[11]))
+                incidences = int(row[11])
 
+            emergency_call = EmergencyCall(date, location, row[3], incidences)
             police_data_so_far.append(emergency_call)
 
         return police_data_so_far
