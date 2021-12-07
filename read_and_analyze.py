@@ -40,11 +40,13 @@ class EmergencyCall:
     date: datetime.date
     location: str
     emergency: str
+    num_incidents: int
 
-    def __init__(self, date: datetime.date, location: str, emergency: str) -> None:
+    def __init__(self, date: datetime.date, location: str, emergency: str, num_incidents: int) -> None:
         self.date = date
         self.location = location
         self.emergency = emergency
+        self.num_incidents = num_incidents
 
 
 class CovidData:
@@ -104,12 +106,23 @@ def read_police_data(filename: str) -> list[EmergencyCall]:
     Preconditions:
       - filename refers to a valid csv file with headers
     """
+    police_data_so_far = []
     with open(filename) as file:
         reader = csv.reader(file)
 
         _ = next(reader)
 
-        return [EmergencyCall(police_data_str_to_date(row[0]), det_prov_terr(row[1]), row[3]) for row in reader]
+        for row in reader:
+            date = police_data_str_to_date(row[0])
+            prov_terr = det_prov_terr(row[1])
+            if row[11] == '':
+                emergency_call = EmergencyCall(date, prov_terr, row[3], 0)
+            else:
+                emergency_call = EmergencyCall(date, prov_terr, row[3], int(row[11]))
+
+            police_data_so_far.append(emergency_call)
+
+        return police_data_so_far
 
 
 def covid_data_str_to_date(date_str: str) -> datetime.date:
