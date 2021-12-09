@@ -28,13 +28,11 @@ DAYS_PER_MONTH = {1: 31,
 class EmergencyCall:
     """A data type representing the specific 911 call. Each instance corresponds to one row of data in police_data.csv
     with the irrelevant columns removed.
-
     Attributes:
       - date: the date of the call
       - _emergency: the reason for the call
       - _location: the location of the incident (either a province, territory, or just Canada)
       - _num_incidents: the number of calls for emergency in the month of date
-
     Representation Invariants:
       - self._emergency != ''
       - self._location in PROV_AND_TERR or self._location == "Canada"
@@ -66,14 +64,12 @@ class EmergencyCall:
 class CovidData:
     """A data type representing the covid data for the day. Each instance corresponds to one row of data in
     covid_data.csv.
-
     Attributes:
       - _location: the location that corresponds with the covid data (either a province, territory, or just Canada)
       - date: the date of the data
       - _num_active: the total number of active cases for prov_terr as of date
       - _num_deaths: the number of new covid related deaths on date for prov_terr
-
-    Representation Invaraints:
+    Representation Invariants:
       - self._num_deaths >= 0
       - self._num_active >= 0
       - self._location in PROV_AND_TERR or self._location == "Canada"
@@ -105,7 +101,6 @@ class CovidData:
 def read_covid_data(filename: str) -> list[CovidData]:
     """Return the data table stored in the covid_data csv file with the given filename.
     The return value is a list of CovidData. Each CovidData instance is a row of information.
-
     Preconditions:
       - filename refers to a valid csv file with headers
     """
@@ -126,7 +121,6 @@ def read_covid_data(filename: str) -> list[CovidData]:
 def read_police_data(filename: str) -> list[EmergencyCall]:
     """Return the data table stored in the police_data csv file with the given filename. The return value is a list of
     EmergencyCall. Each EmergencyCall instance is a row of information.
-
     Preconditions:
       - filename refers to a valid csv file with headers
     """
@@ -153,7 +147,6 @@ def read_police_data(filename: str) -> list[EmergencyCall]:
 
 def covid_data_str_to_date(date_str: str) -> datetime.date:
     """Convert a string in the yyyy-mm-dd format (from the covid_data.csv file) to a datetime.date
-
     Preconditions:
       - len(date_str) == 10
       - date_str[4] == '-'
@@ -161,7 +154,6 @@ def covid_data_str_to_date(date_str: str) -> datetime.date:
       - int(date_str[:4]) >= 0
       - 0 <= int(date_str[5:7]) <= 12
       - 0 <= int(date_str[8:]) <= 31
-
     >>> covid_data_str_to_date('2020-01-01')
     datetime.date(2020, 1, 1)
     >>> covid_data_str_to_date('1999-12-31')
@@ -177,13 +169,11 @@ def covid_data_str_to_date(date_str: str) -> datetime.date:
 def police_data_str_to_date(date_str: str) -> datetime.date:
     """Convert a string in the yyyy-mm format (from the police_data.csv file) to a datetime.date with the day
     being the last day of the corresponding month.
-
     Preconditions:
       - len(date_str) == 7
       - date_str[4] == '-'
       - int(date_str[:4]) >= 0
       - 0 <= int(date_str[5:]) <= 12
-
     >>> covid_data_str_to_date('2020-01')
     datetime.date(2020, 1, 31)
     >>> covid_data_str_to_date('1999-02')
@@ -201,10 +191,8 @@ def police_data_str_to_date(date_str: str) -> datetime.date:
 
 def det_location(location: str) -> str:
     """Return the province or territory based on location and Canada if it cannot be determined
-
     Preconditions:
       - len(location) != 0
-
     >>> det_location("Royal Newfoundland Constabulary")
     'Newfoundland and Labrador'
     >>> det_location("Total, Selected police services")
@@ -218,11 +206,9 @@ def det_location(location: str) -> str:
 
 
 def filter_physical_crimes(data: list[EmergencyCall]) -> list[EmergencyCall]:
-    """Return a new set of EmergencyCall with only physical crimes.
-
+    """Return a new list of EmergencyCall with only physical crimes.
     Preconditions:
       - len(data) != 0
-
     >>> call1 = EmergencyCall(datetime.date(2020, 1, 31), 'Fake Street E', 'assault', 34)
     >>> call2 = EmergencyCall(datetime.date(2020, 2, 29), 'Fake Street W', 'suicide', 16)
     >>> filter_physical_crimes([call1, call2]) == [call1]
@@ -241,7 +227,6 @@ def filter_physical_crimes(data: list[EmergencyCall]) -> list[EmergencyCall]:
 
 def filter_data_by_month(data: list, location: str, month: int, year: int) -> list:
     """Return a new list of data with only data corresponding to month, year for location
-
     Preconditions:
       - len(data) != 0
       - location in PROV_AND_TERR or location == "Canada"
@@ -266,3 +251,11 @@ def get_crimes_only() -> set[str]:
         crimes.add(call.get_emergency())
 
     return crimes
+
+
+if __name__ == '__main__':
+    import python_ta
+    python_ta.check_all(config={
+        'extra-imports': ['math'],
+        'max-line-length': 100
+    })
