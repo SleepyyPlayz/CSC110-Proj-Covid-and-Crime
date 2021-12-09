@@ -330,3 +330,18 @@ def get_crimes_only() -> set[str]:
         crimes.add(call.get_emergency())
 
     return crimes
+
+
+def get_locations_only(filename: str) -> set[str]:
+    """Return a set containing unique locations in dataset"""
+    locations = set()
+
+    with open(filename) as file:
+        reader = csv.reader(file)
+
+        _ = next(reader)
+
+        for row in reader:
+            locations.add(row[1])
+
+    return locations
