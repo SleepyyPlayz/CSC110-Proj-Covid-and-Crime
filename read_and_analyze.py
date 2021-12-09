@@ -68,8 +68,8 @@ class CovidData:
     covid_data.csv.
 
     Attributes:
-      - _location: the location that corresponds with the covid data (either a province, territory, or just Canada)
       - date: the date of the data
+      - _location: the location that corresponds with the covid data (either a province, territory, or just Canada)
       - _num_active: the total number of active cases for prov_terr as of date
       - _num_deaths: the number of new covid related deaths on date for prov_terr
 
