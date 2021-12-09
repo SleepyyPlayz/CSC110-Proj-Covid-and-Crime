@@ -30,23 +30,36 @@ class EmergencyCall:
 
     Attributes:
       - date: the date of the call
-      - emergency: the reason for the call
-      - location: the location of the incident (either a province, territory, or just Canada)
+      - _emergency: the reason for the call
+      - _location: the location of the incident (either a province, territory, or just Canada)
+      - _num_incidents: the number of calls for emergency in the month of date
 
     Representation Invariants:
-      - self.emergency != ''
-      - self.location in PROV_AND_TERR or self.location == "Canada"
+      - self._emergency != ''
+      - self._location in PROV_AND_TERR or self._location == "Canada"
     """
     date: datetime.date
-    location: str
-    emergency: str
-    num_incidents: int
+    _location: str
+    _emergency: str
+    _num_incidents: int
 
     def __init__(self, date: datetime.date, location: str, emergency: str, num_incidents: int) -> None:
         self.date = date
-        self.location = location
-        self.emergency = emergency
-        self.num_incidents = num_incidents
+        self._location = location
+        self._emergency = emergency
+        self._num_incidents = num_incidents
+
+    def get_location(self) -> str:
+        """Return the location of the EmergencyCall instance"""
+        return self._location
+
+    def get_emergency(self) -> str:
+        """Return the emergency of the EmergencyCall instance"""
+        return self._emergency
+
+    def get_num_incidents(self) -> int:
+        """Return the number of calls for a certain emergency in the month corresponding to date"""
+        return self._num_incidents
 
 
 class CovidData:
@@ -55,28 +68,38 @@ class CovidData:
     Each instance corresponds to one row of data in covid_data.csv
 
     Attributes:
-        - date: the date of the data
-        - num_confirmed: the number of new confirmed cases on date for prov_terr
-        - num_deaths: the number of new covid related deaths on date for prov_terr
-        - num_active: the total number of active cases for prov_terr as of date
-        - location: the location that corresponds with the covid data (either a province, territory, or just Canada)
+      - _location: the location that corresponds with the covid data (either a province, territory, or just Canada)
+      - date: the date of the data
+      - _num_active: the total number of active cases for prov_terr as of date
+      - _num_deaths: the number of new covid related deaths on date for prov_terr
 
     Representation Invaraints:
-      - self.num_confirmed >= 0
-      - self.num_deaths >= 0
-      - self.num_active >= 0
-      - self.location in PROV_AND_TERR or self.location == "Canada"
+      - self._num_deaths >= 0
+      - self._num_active >= 0
+      - self._location in PROV_AND_TERR or self._location == "Canada"
     """
-    location: str
+    _location: str
     date: datetime.date
-    num_active: int
-    num_deaths: int
+    _num_active: int
+    _num_deaths: int
 
     def __init__(self, location: str, date: datetime.date, num_active: int, num_deaths: int) -> None:
-        self.location = location
+        self._location = location
         self.date = date
-        self.num_active = num_active
-        self.num_deaths = num_deaths
+        self._num_active = num_active
+        self._num_deaths = num_deaths
+
+    def get_location(self) -> str:
+        """Return the location that corresponds with CovidData"""
+        return self._location
+
+    def get_num_active(self) -> int:
+        """Return the number of active cases that corresponds with the instance of CovidData"""
+        return self._num_active
+
+    def get_num_deaths(self) -> int:
+        """Return the number of new covid related deaths that corresponds with the instance of CovidData"""
+        return self._num_deaths
 
 
 def read_covid_data(filename: str) -> list[CovidData]:
@@ -218,7 +241,7 @@ def filter_data_by_month(data: list, location: str, month: int, year: int) -> li
     filtered_so_far = []
 
     for info in data:
-        if info.date.month == month and info.date.year == year and info.location == location:
+        if info.date.month == month and info.date.year == year and info.get_location() == location:
             filtered_so_far.append(info)
 
     return filtered_so_far
