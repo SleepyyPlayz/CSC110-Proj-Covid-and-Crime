@@ -281,7 +281,6 @@ def get_crimes_only() -> set[str]:
     """Return a set containing unique crimes in dataset"""
     crimes = set()
     emergency_calls = read_police_data('data_sets/police_data.csv')
-    print(len(emergency_calls))
 
     for call in emergency_calls:
         crimes.add(call.get_emergency())
