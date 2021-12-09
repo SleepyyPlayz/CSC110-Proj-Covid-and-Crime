@@ -9,7 +9,11 @@ PROV_AND_TERR_KEYWORDS = ['British Columbia', 'Alberta', 'Saskatchewan', 'Manito
                           'Newfoundland', 'New Brunswick', 'Nova Scotia', 'Prince Edward Island',
                           'Northwest Territories', 'Nunavut', 'Yukon']
 
-PHYSICAL_CRIMES = {'assault', 'domestic disturbance', 'dangerous operation', 'death', 'harm'}
+PHYSICAL_CRIMES = {'assault', 'domestic disturbance', 'dangerous operation', 'death', 'harm', 'robbery'}
+
+PUBLIC = {'public', 'non-family', 'unknown', 'breaking and entering', 'mental health act', 'dangerous operation',
+          'comply with order', 'fraud', 'impaired driving', 'theft', 'provincial/territorial', 'shoplifting',
+          'robbery'}
 
 DAYS_PER_MONTH = {1: 31,
                   2: 28,
@@ -217,26 +221,42 @@ def det_location(location: str) -> str:
     return "Canada"
 
 
-def filter_physical_crimes(data: list[EmergencyCall]) -> list[EmergencyCall]:
-    """Return a new list of EmergencyCall with only physical crimes.
+def filter_crimes_by_type(data: list[EmergencyCall], filter_type: str) -> \
+        tuple[list[EmergencyCall], list[EmergencyCall]]:
+    """Return tuple that contains lists of EmergencyCall instances, one selecting for the filter_type
+    and one against the filter_type.
 
     Preconditions:
       - len(data) != 0
 
-    >>> call1 = EmergencyCall(datetime.date(2020, 1, 31), 'Fake Street E', 'assault', 34)
-    >>> call2 = EmergencyCall(datetime.date(2020, 2, 29), 'Fake Street W', 'suicide', 16)
-    >>> filter_physical_crimes([call1, call2]) == [call1]
+    >>> call1 = EmergencyCall(datetime.date(2020, 1, 31), 'Fake Street E', \
+    'Impaired driving, causing death or bodily harm [921]', 34)
+    >>> call2 = EmergencyCall(datetime.date(2020, 2, 29), 'Fake Street W', \
+    'Calls for service, suicide/attempted suicide', 16)
+    >>> filter_crimes_by_type([call1, call2], 'physical')[0] == [call1]
+    True
+    >>> filter_crimes_by_type([call1, call2], 'public')[0] == [call1]
     True
     """
-    crime_list = []
+    filter_included = []
+    filter_excluded = []
+    if filter_type == 'public':
+        keywords = PUBLIC
+    else:
+        keywords = PHYSICAL_CRIMES
 
     for call in data:
-        for crime in PHYSICAL_CRIMES:
+        include = False
+        for crime in keywords:
             if crime in call.get_emergency().lower():
-                crime_list.append(call)
-                break
+                include = True
 
-    return crime_list
+        if include:
+            filter_included.append(call)
+        else:
+            filter_excluded.append(call)
+
+    return filter_included, filter_excluded
 
 
 def filter_data_by_month(data: list, location: str, month: int, year: int) -> list:
@@ -261,6 +281,7 @@ def get_crimes_only() -> set[str]:
     """Return a set containing unique crimes in dataset"""
     crimes = set()
     emergency_calls = read_police_data('data_sets/police_data.csv')
+    print(len(emergency_calls))
 
     for call in emergency_calls:
         crimes.add(call.get_emergency())
