@@ -9,6 +9,8 @@ PROV_AND_TERR_KEYWORDS = ['British Columbia', 'Alberta', 'Saskatchewan', 'Manito
                           'Newfoundland', 'New Brunswick', 'Nova Scotia', 'Prince Edward Island',
                           'Northwest Territories', 'Nunavut', 'Yukon']
 
+PHYSICAL_CRIMES = {'assault', 'domestic disturbance', 'dangerous operation', 'death', 'harm'}
+
 DAYS_PER_MONTH = {1: 31,
                   2: 28,
                   3: 31,
@@ -76,8 +78,8 @@ class CovidData:
       - self._num_active >= 0
       - self._location in PROV_AND_TERR or self._location == "Canada"
     """
-    _location: str
     date: datetime.date
+    _location: str
     _num_active: int
     _num_deaths: int
 
@@ -216,16 +218,25 @@ def det_location(location: str) -> str:
 
 
 def filter_physical_crimes(data: list[EmergencyCall]) -> list[EmergencyCall]:
-    """Return a new list of EmergencyCall with only physical crimes.
+    """Return a new set of EmergencyCall with only physical crimes.
 
     Preconditions:
       - len(data) != 0
 
-    >>> call1 = EmergencyCall(datetime.date(2020, 1, 31), 'assault', 'Fake Street E')
-    >>> call2 = EmergencyCall(datetime.date(2020, 2, 29), 'suicide', 'Fake Street W')
-    >>> filter_physical_crimes([call1, call2])
-    [call1]
+    >>> call1 = EmergencyCall(datetime.date(2020, 1, 31), 'Fake Street E', 'assault', 34)
+    >>> call2 = EmergencyCall(datetime.date(2020, 2, 29), 'Fake Street W', 'suicide', 16)
+    >>> filter_physical_crimes([call1, call2]) == [call1]
+    True
     """
+    crime_list = []
+
+    for call in data:
+        for crime in PHYSICAL_CRIMES:
+            if crime in call.get_emergency().lower():
+                crime_list.append(call)
+                break
+
+    return crime_list
 
 
 def filter_data_by_month(data: list, location: str, month: int, year: int) -> list:
@@ -244,3 +255,14 @@ def filter_data_by_month(data: list, location: str, month: int, year: int) -> li
             filtered_so_far.append(info)
 
     return filtered_so_far
+
+
+def get_crimes_only() -> set[str]:
+    """Print a set containing unique crimes in dataset"""
+    crimes = set()
+    emergency_calls = read_police_data('data_sets/police_data.csv')
+
+    for call in emergency_calls:
+        crimes.add(call.get_emergency())
+
+    return crimes
