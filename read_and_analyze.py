@@ -25,15 +25,12 @@ DAYS_PER_MONTH = {1: 31,
 
 class EmergencyCall:
     """A data type representing the specific 911 call.
-
     Each instance corresponds to one row of data in police_data.csv with the irrelevant columns removed
-
     Attributes:
       - date: the date of the call
       - _emergency: the reason for the call
       - _location: the location of the incident (either a province, territory, or just Canada)
       - _num_incidents: the number of calls for emergency in the month of date
-
     Representation Invariants:
       - self._emergency != ''
       - self._location in PROV_AND_TERR or self._location == "Canada"
@@ -64,15 +61,12 @@ class EmergencyCall:
 
 class CovidData:
     """A data type representing the covid data for the day.
-
     Each instance corresponds to one row of data in covid_data.csv
-
     Attributes:
       - _location: the location that corresponds with the covid data (either a province, territory, or just Canada)
       - date: the date of the data
       - _num_active: the total number of active cases for prov_terr as of date
       - _num_deaths: the number of new covid related deaths on date for prov_terr
-
     Representation Invaraints:
       - self._num_deaths >= 0
       - self._num_active >= 0
@@ -104,8 +98,8 @@ class CovidData:
 
 def read_covid_data(filename: str) -> list[CovidData]:
     """Return the data table stored in the covid_data csv file with the given filename.
-    The return value is a list of lists. The nested lists represent each row of necessary
-    information.
+    The return value is a list of CovidData. Each CovidData instance is a row of information.
+
     Preconditions:
       - filename refers to a valid csv file with headers
     """
@@ -124,8 +118,9 @@ def read_covid_data(filename: str) -> list[CovidData]:
 
 
 def read_police_data(filename: str) -> list[EmergencyCall]:
-    """Return the data table stored in the police_data csv file with the given filename.
-    The return value is a list of EmergencyCall. Each EmergencyCall instance is a row of information.
+    """Return the data table stored in the police_data csv file with the given filename. The return value is a list of
+    EmergencyCall. Each EmergencyCall instance is a row of information.
+
     Preconditions:
       - filename refers to a valid csv file with headers
     """
