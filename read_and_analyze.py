@@ -258,7 +258,7 @@ def filter_data_by_month(data: list, location: str, month: int, year: int) -> li
 
 
 def get_crimes_only() -> set[str]:
-    """Print a set containing unique crimes in dataset"""
+    """Return a set containing unique crimes in dataset"""
     crimes = set()
     emergency_calls = read_police_data('data_sets/police_data.csv')
 
