@@ -9,10 +9,13 @@ PROV_AND_TERR_KEYWORDS = ['British Columbia', 'Alberta', 'Saskatchewan', 'Manito
                           'Newfoundland', 'New Brunswick', 'Nova Scotia', 'Prince Edward Island',
                           'Northwest Territories', 'Nunavut', 'Yukon']
 
+CRIMES = {'assault', 'breaking and entering', 'domestic disturbance', 'dangerous operation', 'death', 'harm',
+          'robbery', 'comply with order', 'fraud', 'impaired driving', 'theft', 'shoplifting'}
+
 PHYSICAL_CRIMES = {'assault', 'domestic disturbance', 'dangerous operation', 'death', 'harm', 'robbery'}
 
-PUBLIC = {'public', 'non-family', 'unknown', 'breaking and entering', 'mental health act', 'dangerous operation',
-          'comply with order', 'fraud', 'impaired driving', 'theft', 'provincial/territorial', 'shoplifting',
+PUBLIC = {'public', 'non-family', 'unknown', 'non-residential', 'mental health act', 'dangerous operation',
+          'comply with order', 'impaired driving', 'theft', 'provincial/territorial', 'shoplifting',
           'robbery'}
 
 DAYS_PER_MONTH = {1: 31,
@@ -221,12 +224,39 @@ def det_location(location: str) -> str:
     return "Canada"
 
 
+def filter_just_crimes(data: list[EmergencyCall]) -> list[EmergencyCall]:
+    """Returns list of EmergencyCall instances that are crimes, with other types of emergencies omitted
+
+    Preconditions:
+      - len(data) != 0
+
+    >>> call1 = EmergencyCall(datetime.date(2020, 1, 31), 'Fake Street E', \
+    'Impaired driving, causing death or bodily harm [921]', 34)
+    >>> call2 = EmergencyCall(datetime.date(2020, 2, 29), 'Fake Street W', \
+    'Calls for service, suicide/attempted suicide', 16)
+    >>> filter_just_crimes([call1, call2]) == [call1]
+    True
+    """
+    crimes = []
+    for call in data:
+        include = False
+        for crime in CRIMES:
+            if crime in call.get_emergency().lower():
+                include = True
+
+        if include:
+            crimes.append(call)
+
+    return crimes
+
+
 def filter_crimes_by_type(data: list[EmergencyCall], filter_type: str) -> \
         tuple[list[EmergencyCall], list[EmergencyCall]]:
     """Return tuple that contains lists of EmergencyCall instances, one selecting for the filter_type
     and one against the filter_type.
 
     Preconditions:
+      - data contains only crimes, with other types of emergencies omitted
       - len(data) != 0
 
     >>> call1 = EmergencyCall(datetime.date(2020, 1, 31), 'Fake Street E', \
