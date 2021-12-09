@@ -52,6 +52,7 @@ class EmergencyCall:
     _num_incidents: int
 
     def __init__(self, date: datetime.date, location: str, emergency: str, num_incidents: int) -> None:
+        """Initialize a new EmergencyCall instance"""
         self.date = date
         self._location = location
         self._emergency = emergency
@@ -90,9 +91,10 @@ class CovidData:
     _num_active: int
     _num_deaths: int
 
-    def __init__(self, location: str, date: datetime.date, num_active: int, num_deaths: int) -> None:
-        self._location = location
+    def __init__(self, date: datetime.date, location: str, num_active: int, num_deaths: int) -> None:
+        """Initialize a new covid data instance"""
         self.date = date
+        self._location = location
         self._num_active = num_active
         self._num_deaths = num_deaths
 
@@ -125,7 +127,7 @@ def read_covid_data(filename: str) -> list[CovidData]:
 
         for row in reader:
             if row[1] in PROV_AND_TERR or row[1] == "Canada":
-                covid_data_so_far.append(CovidData(row[1], covid_data_str_to_date(row[3]), int(row[5]), int(row[7])))
+                covid_data_so_far.append(CovidData(covid_data_str_to_date(row[3]), row[1], int(row[5]), int(row[7])))
 
     return covid_data_so_far
 
@@ -230,22 +232,20 @@ def filter_just_crimes(data: list[EmergencyCall]) -> list[EmergencyCall]:
     Preconditions:
       - len(data) != 0
 
-    >>> call1 = EmergencyCall(datetime.date(2020, 1, 31), 'Fake Street E', \
+    >>> call1 = EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 34)
-    >>> call2 = EmergencyCall(datetime.date(2020, 2, 29), 'Fake Street W', \
+    >>> call2 = EmergencyCall(datetime.date(2020, 2, 29), 'Ontario', \
     'Calls for service, suicide/attempted suicide', 16)
     >>> filter_just_crimes([call1, call2]) == [call1]
     True
     """
     crimes = []
+
     for call in data:
-        include = False
         for crime in CRIMES:
             if crime in call.get_emergency().lower():
-                include = True
-
-        if include:
-            crimes.append(call)
+                crimes.append(call)
+                break
 
     return crimes
 
@@ -258,10 +258,11 @@ def filter_crimes_by_type(data: list[EmergencyCall], filter_type: str) -> \
     Preconditions:
       - data contains only crimes, with other types of emergencies omitted
       - len(data) != 0
+      - filter_type == 'public' or filter_type == 'physical'
 
-    >>> call1 = EmergencyCall(datetime.date(2020, 1, 31), 'Fake Street E', \
+    >>> call1 = EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 34)
-    >>> call2 = EmergencyCall(datetime.date(2020, 2, 29), 'Fake Street W', \
+    >>> call2 = EmergencyCall(datetime.date(2020, 2, 29), 'Ontario', \
     'Calls for service, suicide/attempted suicide', 16)
     >>> filter_crimes_by_type([call1, call2], 'physical')[0] == [call1]
     True
@@ -280,6 +281,7 @@ def filter_crimes_by_type(data: list[EmergencyCall], filter_type: str) -> \
         for crime in keywords:
             if crime in call.get_emergency().lower():
                 include = True
+                break
 
         if include:
             filter_included.append(call)
@@ -297,6 +299,18 @@ def filter_data_by_month(data: list, location: str, month: int, year: int) -> li
       - location in PROV_AND_TERR or location == "Canada"
       - 1 <= month <= 12
       - year >= 0
+
+    >>> call1 = EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
+    'Impaired driving, causing death or bodily harm [921]', 34)
+    >>> call2 = EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
+    'Calls for service, suicide/attempted suicide', 16)
+    >>> filter_data_by_month([call1, call2], 'Ontario', 1, 2020) == [call1, call2]
+    True
+    >>> covid_data1 = CovidData(datetime.date(2020, 1, 1), 'Ontario', 1, 1)
+    >>> covid_data2 = CovidData(datetime.date(2021, 1, 2), 'Ontario', 1, 1)
+    >>> covid_data3 = CovidData(datetime.date(2020, 1, 3), 'Quebec', 1, 1)
+    >>> filter_data_by_month([covid_data1, covid_data2, covid_data3], 'Ontario', 1, 2020) == [covid_data1]
+    True
     """
     filtered_so_far = []
 
