@@ -193,9 +193,9 @@ def police_data_str_to_date(date_str: str) -> datetime.date:
       - int(date_str[:4]) >= 0
       - 0 <= int(date_str[5:]) <= 12
 
-    >>> covid_data_str_to_date('2020-01')
+    >>> police_data_str_to_date('2020-01')
     datetime.date(2020, 1, 31)
-    >>> covid_data_str_to_date('1999-02')
+    >>> police_data_str_to_date('1999-02')
     datetime.date(1999, 2, 28)
     """
     year = int(date_str[:4])
