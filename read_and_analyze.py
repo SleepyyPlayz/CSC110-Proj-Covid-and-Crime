@@ -432,36 +432,21 @@ def get_police_data(data: list[EmergencyCall], location: str, year: int, categor
     return category_dict, opp_category_dict
 
 
-def get_police_data_totals(data: list[EmergencyCall], location: str, year: int, category: str) -> \
-        tuple[dict[str, list], dict[str, list]]:
-    """Return a tuple of 2 dictionaries. The first dictionary contains the total crime in a specific category, at a
-    location during year. The second dictionary contains the total crime in the opposite of the
-    category, at a location during year.
+def get_police_data_totals(data_dict: dict[str, list]) -> dict[str, list]:
+    """Return a new dictionary with the same keys. For the values, only append the data that track the total crimes
 
     Preconditions:
-      - len(data) != 0
-      - location in PROV_AND_TERR or location == 'Canada'
-      - year >= 0
-      - category == 'public' or category == 'physical'
+      - len(data_dict) != 0
     """
-    total_cat_dict_so_far = {'Date': [], 'Emergency': [], 'Number of Incidents': []}
-    total_opp_cat_dict_so_far = {'Date': [], 'Emergency': [], 'Number of Incidents': []}
+    total_dict_so_far = {'Date': [], 'Emergency': [], 'Number of Incidents': []}
 
-    category_dict, opp_category_dict = get_police_data(data, location, year, category)
+    for i in range(len(data_dict['Date'])):
+        if 'Total' in data_dict['Emergency'][i]:
+            total_dict_so_far['Date'].append(data_dict['Date'][i])
+            total_dict_so_far['Emergency'].append(data_dict['Emergency'][i])
+            total_dict_so_far['Number of Incidents'].append(data_dict['Number of Incidents'][i])
 
-    for i in range(len(category_dict['Date'])):
-        if 'Total' in category_dict['Emergency']:
-            total_cat_dict_so_far['Date'].append(category_dict['Date'][i])
-            total_cat_dict_so_far['Emergency'].append(category_dict['Emergency'][i])
-            total_cat_dict_so_far['Number of Incidents'].append(category_dict['Number of Incidents'][i])
-
-    for i in range(len(opp_category_dict['Date'])):
-        if 'Total' in opp_category_dict['Emergency']:
-            total_opp_cat_dict_so_far['Date'].append(category_dict['Date'][i])
-            total_opp_cat_dict_so_far['Emergency'].append(category_dict['Emergency'][i])
-            total_opp_cat_dict_so_far['Number of Incidents'].append(category_dict['Number of Incidents'][i])
-
-    return total_cat_dict_so_far, total_opp_cat_dict_so_far
+    return total_dict_so_far
 
 
 def get_covid_data(data: list[CovidData], location: str, year: int) -> dict[str, list]:

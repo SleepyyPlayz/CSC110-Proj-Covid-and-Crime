@@ -37,25 +37,50 @@ police_data_canada_2021_physical, police_data_canada_2021_non_physical = RNA.get
 police_data_canada_2021_public, police_data_canada_2021_private = RNA.get_police_data(police_data_raw, 'Canada', 2021,
                                                                                       'public')
 
-# Physical and Non Physical Crimes for Each Province for 2020
+# Total Physical and Non Physical Crimes for Canada for 2020
+total_police_data_canada_2020_physical = RNA.get_police_data_totals(police_data_canada_2020_physical)
+total_police_data_canada_2020_non_physical = RNA.get_police_data_totals(police_data_canada_2020_non_physical)
+
+# Total Public and Private Crimes for Canada for 2020
+total_police_data_canada_2020_public = RNA.get_police_data_totals(police_data_canada_2020_public)
+total_police_data_canada_2020_private = RNA.get_police_data_totals(police_data_canada_2020_private)
+
+# Total Physical and Non Physical Crimes for Canada for 2021
+total_police_data_canada_2021_physical = RNA.get_police_data_totals(police_data_canada_2021_physical)
+total_police_data_canada_2021_non_physical = RNA.get_police_data_totals(police_data_canada_2020_non_physical)
+
+# Total Public and Private Crimes for Canada for 2021
+total_police_data_canada_2021_public = RNA.get_police_data_totals(police_data_canada_2021_public)
+total_police_data_canada_2021_private = RNA.get_police_data_totals(police_data_canada_2021_private)
+
+# Physical and Non Physical Crimes (Total and Non-Total) for Each Province for 2020
 for pt in RNA.PROV_AND_TERR:
     police_data_2020_physical, police_data_2020_non_physical = RNA.get_police_data(police_data_raw, pt, 2020,
                                                                                    'physical')
+    total_police_data_2020_physical = RNA.get_police_data_totals(police_data_2020_physical)
+    total_police_data_2020_non_phyiscal = RNA.get_police_data_totals(police_data_2020_non_physical)
 
-# Public and Private Crimes for Each Province for 2020
+# Public and Private Crimes (Total and Non-Total) for Each Province for 2020
 for pt in RNA.PROV_AND_TERR:
     police_data_2020_public, police_data_2020_private = RNA.get_police_data(police_data_raw, pt, 2020, 'public')
+    total_police_data_2020_public = RNA.get_police_data_totals(police_data_2020_public)
+    total_police_data_2020_private = RNA.get_police_data_totals(police_data_2020_private)
 
-# Physical and Non Physical Crimes for Each Province for 2021
+# Physical and Non Physical Crimes (Total and Non-Total) for Each Province for 2021
 for pt in RNA.PROV_AND_TERR:
     police_data_2021_physical, police_data_2021_non_physical = RNA.get_police_data(police_data_raw, pt, 2021,
                                                                                    'physical')
+    total_police_data_2021_physical = RNA.get_police_data_totals(police_data_2021_physical)
+    total_police_data_2021_non_physical = RNA.get_police_data_totals(police_data_2021_non_physical)
 
-# Public and Private Crimes for Each Province for 2021
+# Public and Private Crimes (Total and Non-Total) for Each Province for 2021
 for pt in RNA.PROV_AND_TERR:
     police_data_2021_public, police_data_2021_private = RNA.get_police_data(police_data_raw, pt, 2021, 'public')
+    total_police_data_2021_public = RNA.get_police_data_totals(police_data_2021_public)
+    total_police_data_2021_private = RNA.get_police_data_totals(police_data_2021_private)
 
 if __name__ == '__main__':
     from pprint import pprint
     pprint(covid_data_canada_2020)
     pprint(police_data_canada_2020_physical)
+    pprint(total_police_data_canada_2020_physical)
