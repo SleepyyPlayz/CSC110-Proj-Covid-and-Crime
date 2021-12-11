@@ -342,16 +342,31 @@ def get_monthly_cases(data: list[CovidData], year: int, location: str) -> list[C
     covid_data_so_far = []
 
     for covid_data in data:
-        if covid_data.date.year == year and year % 4 == 0 and covid_data.date.month == 2 and covid_data.date.day == 29 \
-                and covid_data.get_location() == location:
+        if covid_data.date.year == year and covid_data.get_location() == location and check_if_monthly_case(covid_data):
             covid_data_so_far.append(covid_data)
-        elif covid_data.date.year == year and covid_data.get_location() == location:
-            for month in DAYS_PER_MONTH:
-                if covid_data.date.month == month and covid_data.date.day == DAYS_PER_MONTH[month]:
-                    covid_data_so_far.append(covid_data)
-                    break
 
     return covid_data_so_far
+
+
+def check_if_monthly_case(covid_data: CovidData) -> bool:
+    """Return whether the CovidData instance is data for the last day of a certain month in a certain year for a
+    particular location
+
+    >>> covid_data1 = CovidData(datetime.date(2020, 1, 31), 'Ontario', 1, 1)
+    >>> check_if_monthly_case(covid_data1)
+    True
+    >>> covid_data2 = CovidData(datetime.date(2020, 1, 30), 'Ontario', 1, 1)
+    >>> check_if_monthly_case(covid_data2)
+    False
+    """
+    if covid_data.date.month == 2 and covid_data.date.day == 29:
+        return True
+
+    for month in DAYS_PER_MONTH:
+        if covid_data.date.month == month and covid_data.date.day == DAYS_PER_MONTH[month]:
+            return True
+
+    return False
 
 
 def covid_data_to_dict(data: list[CovidData]) -> dict[str: list]:
