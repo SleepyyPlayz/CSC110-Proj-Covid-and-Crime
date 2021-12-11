@@ -321,6 +321,65 @@ def filter_data_by_month(data: list, location: str, month: int, year: int) -> li
     return filtered_so_far
 
 
+def get_monthly_cases(data: list[CovidData], year: int, location: str) -> list[CovidData]:
+    """Return a list of CovidData with only the data for the last day of each month for a particular year for a
+    particular location
+
+    Preconditions:
+      - len(data) != 0
+      - year >= 0
+      - location in PROV_AND_TERR or location == 'Canada'
+
+    >>> covid_data1 = CovidData(datetime.date(2020, 1, 31), 'Ontario', 1, 1)
+    >>> covid_data2 = CovidData(datetime.date(2020, 2, 29), 'Ontario', 1, 1)
+    >>> covid_data3 = CovidData(datetime.date(2020, 1, 29), 'Ontario', 1, 1)
+    >>> covid_data4 = CovidData(datetime.date(2021, 1, 31), 'Ontario', 1, 1)
+    >>> covid_data5 = CovidData(datetime.date(2020, 1, 31), 'Quebec', 1, 1)
+    >>> data = [covid_data1, covid_data2, covid_data3, covid_data4, covid_data5]
+    >>> get_monthly_cases(data, 2020, 'Ontario') == [covid_data1, covid_data2]
+    True
+    """
+    covid_data_so_far = []
+
+    for covid_data in data:
+        if covid_data.date.year == year and year % 4 == 0 and covid_data.date.month == 2 and covid_data.date.day == 29 \
+                and covid_data.get_location() == location:
+            covid_data_so_far.append(covid_data)
+        elif covid_data.date.year == year and covid_data.get_location() == location:
+            for month in DAYS_PER_MONTH:
+                if covid_data.date.month == month and covid_data.date.day == DAYS_PER_MONTH[month]:
+                    covid_data_so_far.append(covid_data)
+                    break
+
+    return covid_data_so_far
+
+
+def covid_data_to_dict(data: list[CovidData]) -> dict[str: list]:
+    """Return a dictionary mapping the attributes of CovidData to a list of attributes for all the CovidData instances
+    in data
+
+    Preconditions:
+      - len(data) != 0
+
+    >>> from pprint import pprint
+    >>> covid_data1 = CovidData(datetime.date(2020, 1, 1), 'Ontario', 1, 1)
+    >>> pprint(covid_data_to_dict([covid_data1]))
+    {'Date': [datetime.date(2020, 1, 1)],
+     'Location': ['Ontario'],
+     'Number of Active Cases': [1],
+     'Number of Deaths': [1]}
+    """
+    dict_so_far = {'Date': [], 'Location': [], 'Number of Active Cases': [], 'Number of Deaths': []}
+
+    for covid_data in data:
+        dict_so_far['Date'].append(covid_data.date)
+        dict_so_far['Location'].append(covid_data.get_location())
+        dict_so_far['Number of Active Cases'].append(covid_data.get_num_active())
+        dict_so_far['Number of Deaths'].append(covid_data.get_num_deaths())
+
+    return dict_so_far
+
+
 def get_crimes_only() -> set[str]:
     """Return a set containing unique crimes in dataset"""
     crimes = set()
