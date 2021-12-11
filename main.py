@@ -56,4 +56,6 @@ for pt in RNA.PROV_AND_TERR:
     police_data_2021_public, police_data_2021_private = RNA.get_police_data(police_data_raw, pt, 2021, 'public')
 
 if __name__ == '__main__':
-    pass
+    from pprint import pprint
+    pprint(covid_data_canada_2020)
+    pprint(police_data_canada_2020_physical)
