@@ -411,7 +411,7 @@ def emergency_call_to_dict(data: list[EmergencyCall]) -> dict[str, list]:
     return dict_so_far
 
 
-def get_crime(data: list[EmergencyCall], location: str, year: int, category: str) -> \
+def get_police_data(data: list[EmergencyCall], location: str, year: int, category: str) -> \
         tuple[dict[str, list], dict[str, list]]:
     """Return a tuple of 2 dictionaries. The first dictionary contains the yearly crime, in a particular
     category, for location during year. The second dictionary contains the yearly crime, in the opposite of the
