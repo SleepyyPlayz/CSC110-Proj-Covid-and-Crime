@@ -371,16 +371,15 @@ def covid_data_to_dict(data: list[CovidData]) -> dict[str: list]:
       - len(data) != 0
 
     >>> covid_data1 = CovidData(datetime.date(2020, 1, 1), 'Ontario', 1, 1)
-    >>> expected = {'Date': [datetime.date(2020, 1, 1)], 'Location': ['Ontario'], 'Number of Active Cases': [1], \
+    >>> expected = {'Date': [datetime.date(2020, 1, 1)], 'Number of Active Cases': [1], \
     'Number of Deaths': [1]}
     >>> covid_data_to_dict([covid_data1]) == expected
     True
     """
-    dict_so_far = {'Date': [], 'Location': [], 'Number of Active Cases': [], 'Number of Deaths': []}
+    dict_so_far = {'Date': [], 'Number of Active Cases': [], 'Number of Deaths': []}
 
     for covid_data in data:
         dict_so_far['Date'].append(covid_data.date)
-        dict_so_far['Location'].append(covid_data.get_location())
         dict_so_far['Number of Active Cases'].append(covid_data.get_num_active())
         dict_so_far['Number of Deaths'].append(covid_data.get_num_deaths())
 
@@ -397,16 +396,15 @@ def emergency_call_to_dict(data: list[EmergencyCall]) -> dict[str, list]:
     >>> from pprint import pprint
     >>> call1 = EmergencyCall(datetime.date(2020, 1, 1), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 1)
-    >>> expected = {'Date': [datetime.date(2020, 1, 1)], 'Location': ['Ontario'], \
+    >>> expected = {'Date': [datetime.date(2020, 1, 1)], \
     'Emergency': ['Impaired driving, causing death or bodily harm [921]'], 'Number of Incidents': [1]}
     >>> emergency_call_to_dict([call1]) == expected
     True
     """
-    dict_so_far = {'Date': [], 'Location': [], 'Emergency': [], 'Number of Incidents': []}
+    dict_so_far = {'Date': [], 'Emergency': [], 'Number of Incidents': []}
 
     for call in data:
         dict_so_far['Date'].append(call.date)
-        dict_so_far['Location'].append(call.get_location())
         dict_so_far['Emergency'].append(call.get_emergency())
         dict_so_far['Number of Incidents'].append(call.get_num_incidents())
 
@@ -435,7 +433,13 @@ def get_crime(data: list[EmergencyCall], location: str, year: int, category: str
 
 
 def get_covid_data(data: list[CovidData], location: str, year: int) -> dict[str, list]:
-    """Return a dictionary of the covid data"""
+    """Return a dictionary of the covid data on the last day of each month for a specific year at a specific location
+
+    Preconditions:
+      - len(data) != 0
+      - location in PROV_AND_TERR or location == 'Canada'
+      - year >= 0
+    """
     covid_in_location = get_monthly_cases(data, year, location)
 
     return covid_data_to_dict(covid_in_location)
