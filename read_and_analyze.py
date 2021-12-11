@@ -32,7 +32,7 @@ DAYS_PER_MONTH = {1: 31,
                   12: 31}
 
 
-class EmergencyCall:
+class PoliceData:
     """A data type representing the specific 911 call. Each instance corresponds to one row of data in police_data.csv
     with the irrelevant columns removed.
 
@@ -52,18 +52,18 @@ class EmergencyCall:
     _num_incidents: int
 
     def __init__(self, date: datetime.date, location: str, emergency: str, num_incidents: int) -> None:
-        """Initialize a new EmergencyCall instance"""
+        """Initialize a new PoliceData instance"""
         self.date = date
         self._location = location
         self._emergency = emergency
         self._num_incidents = num_incidents
 
     def get_location(self) -> str:
-        """Return the location of the EmergencyCall instance"""
+        """Return the location of the PoliceData instance"""
         return self._location
 
     def get_emergency(self) -> str:
-        """Return the emergency of the EmergencyCall instance"""
+        """Return the emergency of the PoliceData instance"""
         return self._emergency
 
     def get_num_incidents(self) -> int:
@@ -132,9 +132,9 @@ def read_covid_data(filename: str) -> list[CovidData]:
     return covid_data_so_far
 
 
-def read_police_data(filename: str) -> list[EmergencyCall]:
+def read_police_data(filename: str) -> list[PoliceData]:
     """Return the data table stored in the police_data csv file with the given filename. The return value is a list of
-    EmergencyCall. Each EmergencyCall instance is a row of information.
+    PoliceData. Each PoliceData instance is a row of information.
 
     Preconditions:
       - filename refers to a valid csv file with headers
@@ -154,7 +154,7 @@ def read_police_data(filename: str) -> list[EmergencyCall]:
             else:
                 incidences = int(row[11])
 
-            emergency_call = EmergencyCall(date, location, row[3], incidences)
+            emergency_call = PoliceData(date, location, row[3], incidences)
             police_data_so_far.append(emergency_call)
 
         return police_data_so_far
@@ -226,15 +226,15 @@ def det_location(location: str) -> str:
     return "Canada"
 
 
-def filter_just_crimes(data: list[EmergencyCall]) -> list[EmergencyCall]:
-    """Returns list of EmergencyCall instances that are crimes, with other types of emergencies omitted
+def filter_just_crimes(data: list[PoliceData]) -> list[PoliceData]:
+    """Returns list of PoliceData instances that are crimes, with other types of emergencies omitted
 
     Preconditions:
       - len(data) != 0
 
-    >>> call1 = EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
+    >>> call1 = PoliceData(datetime.date(2020, 1, 31), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 34)
-    >>> call2 = EmergencyCall(datetime.date(2020, 2, 29), 'Ontario', \
+    >>> call2 = PoliceData(datetime.date(2020, 2, 29), 'Ontario', \
     'Calls for service, suicide/attempted suicide', 16)
     >>> filter_just_crimes([call1, call2]) == [call1]
     True
@@ -250,9 +250,9 @@ def filter_just_crimes(data: list[EmergencyCall]) -> list[EmergencyCall]:
     return crimes
 
 
-def filter_crimes_by_type(data: list[EmergencyCall], filter_type: str) -> \
-        tuple[list[EmergencyCall], list[EmergencyCall]]:
-    """Return tuple that contains lists of EmergencyCall instances, one selecting for the filter_type
+def filter_crimes_by_type(data: list[PoliceData], filter_type: str) -> \
+        tuple[list[PoliceData], list[PoliceData]]:
+    """Return tuple that contains lists of PoliceData instances, one selecting for the filter_type
     and one against the filter_type.
 
     Preconditions:
@@ -260,9 +260,9 @@ def filter_crimes_by_type(data: list[EmergencyCall], filter_type: str) -> \
       - len(data) != 0
       - filter_type == 'public' or filter_type == 'physical'
 
-    >>> call1 = EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
+    >>> call1 = PoliceData(datetime.date(2020, 1, 31), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 34)
-    >>> call2 = EmergencyCall(datetime.date(2020, 2, 29), 'Ontario', \
+    >>> call2 = PoliceData(datetime.date(2020, 2, 29), 'Ontario', \
     'Calls for service, suicide/attempted suicide', 16)
     >>> filter_crimes_by_type([call1, call2], 'physical')[0] == [call1]
     True
@@ -300,9 +300,9 @@ def filter_data_by_month(data: list, location: str, month: int, year: int) -> li
       - 1 <= month <= 12
       - year >= 0
 
-    >>> call1 = EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
+    >>> call1 = PoliceData(datetime.date(2020, 1, 31), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 34)
-    >>> call2 = EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
+    >>> call2 = PoliceData(datetime.date(2020, 1, 31), 'Ontario', \
     'Calls for service, suicide/attempted suicide', 16)
     >>> filter_data_by_month([call1, call2], 'Ontario', 1, 2020) == [call1, call2]
     True
@@ -345,3 +345,15 @@ def get_locations_only(filename: str) -> set[str]:
             locations.add(row[1])
 
     return locations
+
+
+    # >>> call1 = PoliceData(datetime.date(2020, 1, 31), 'Ontario', \
+    # 'Impaired driving, causing death or bodily harm [921]', 34)
+    # >>> call2 = PoliceData(datetime.date(2020, 2, 29), 'Ontario', \
+    # 'Calls for service, suicide/attempted suicide', 16)
+    # >>> filter_just_crimes([call1, call2]) == [call1]
+    # True
+
+call1 = PoliceData(datetime.date(2020, 1, 31), 'Ontario', 'Impaired driving, causing death or bodily harm [921]', 34)
+call2 = PoliceData(datetime.date(2020, 2, 29), 'Ontario', 'Impaired driving, causing death or bodily harm [921]', 16)
+print(filter_just_crimes([call1, call2]))
