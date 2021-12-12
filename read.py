@@ -79,7 +79,7 @@ class CovidData:
       - date: the date of the data
       - _location: the location that corresponds with the covid data (either a province, territory, or just Canada)
       - _num_active: the total number of active cases for prov_terr as of date
-      - _num_deaths: the number of new covid related deaths on date for prov_terr
+      - _num_deaths: the total number of COVID related deaths on date for prov_terr
 
     Representation Invariants:
       - self._num_deaths >= 0
@@ -107,7 +107,7 @@ class CovidData:
         return self._num_active
 
     def get_num_deaths(self) -> int:
-        """Return the number of new covid related deaths that corresponds with the instance of CovidData"""
+        """Return the number of COVID related deaths that corresponds with the instance of CovidData"""
         return self._num_deaths
 
 
