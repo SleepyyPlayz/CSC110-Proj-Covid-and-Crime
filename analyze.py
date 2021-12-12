@@ -156,3 +156,102 @@ def check_if_monthly_case(covid_data: read.CovidData) -> bool:
             return True
 
     return False
+
+
+def covid_data_to_dict(data: list[read.CovidData]) -> dict[str: list]:
+    """Return a dictionary mapping the attributes of CovidData to a list of attributes for all the CovidData instances
+    in data
+
+    Preconditions:
+      - len(data) != 0
+
+    >>> covid_data1 = read.CovidData(datetime.date(2020, 1, 1), 'Ontario', 1, 1)
+    >>> expected = {'Date': [datetime.date(2020, 1, 1)], 'Number of Active Cases': [1], \
+    'Number of Deaths': [1]}
+    >>> covid_data_to_dict([covid_data1]) == expected
+    True
+    """
+    dict_so_far = {'Date': [], 'Number of Active Cases': [], 'Number of Deaths': []}
+
+    for covid_data in data:
+        dict_so_far['Date'].append(covid_data.date)
+        dict_so_far['Number of Active Cases'].append(covid_data.get_num_active())
+        dict_so_far['Number of Deaths'].append(covid_data.get_num_deaths())
+
+    return dict_so_far
+
+
+def emergency_call_to_dict(data: list[read.EmergencyCall]) -> dict[str, list]:
+    """Return a dictionary mapping the attributes of EmergencyCall to a list of attributes for all the EmergencyCall
+     instances in data
+
+    Preconditions:
+      - len(data) != 0
+
+    >>> from pprint import pprint
+    >>> call1 = read.EmergencyCall(datetime.date(2020, 1, 1), 'Ontario', \
+    'Impaired driving, causing death or bodily harm [921]', 1)
+    >>> expected = {'Date': [datetime.date(2020, 1, 1)], \
+    'Emergency': ['Impaired driving, causing death or bodily harm [921]'], 'Number of Incidents': [1]}
+    >>> emergency_call_to_dict([call1]) == expected
+    True
+    """
+    dict_so_far = {'Date': [], 'Emergency': [], 'Number of Incidents': []}
+
+    for call in data:
+        dict_so_far['Date'].append(call.date)
+        dict_so_far['Emergency'].append(call.get_emergency())
+        dict_so_far['Number of Incidents'].append(call.get_num_incidents())
+
+    return dict_so_far
+
+
+def get_police_data(data: list[read.EmergencyCall], location: str, year: int, category: str) -> \
+        tuple[dict[str, list], dict[str, list]]:
+    """Return a tuple of 2 dictionaries. The first dictionary contains the yearly crime, in a particular
+    category, for location during year. The second dictionary contains the yearly crime, in the opposite of the
+    category, for location during year.
+
+    Preconditions:
+      - len(data) != 0
+      - location in PROV_AND_TERR or location == 'Canada'
+      - year >= 0
+      - category == 'public' or category == 'physical'
+    """
+    crimes = filter_just_crimes(data)
+    crimes_in_location = filter_crimes_by_location(crimes, location, year)
+    crimes_category, crimes_opp_category = filter_crimes_by_type(crimes_in_location, category)
+    category_dict = emergency_call_to_dict(crimes_category)
+    opp_category_dict = emergency_call_to_dict(crimes_opp_category)
+
+    return category_dict, opp_category_dict
+
+
+def get_police_data_totals(data_dict: dict[str, list]) -> dict[str, list]:
+    """Return a new dictionary with the same keys. For the values, only append the data that track the total crimes
+
+    Preconditions:
+      - len(data_dict) != 0
+    """
+    total_dict_so_far = {'Date': [], 'Emergency': [], 'Number of Incidents': []}
+
+    for i in range(len(data_dict['Date'])):
+        if 'Total' in data_dict['Emergency'][i]:
+            total_dict_so_far['Date'].append(data_dict['Date'][i])
+            total_dict_so_far['Emergency'].append(data_dict['Emergency'][i])
+            total_dict_so_far['Number of Incidents'].append(data_dict['Number of Incidents'][i])
+
+    return total_dict_so_far
+
+
+def get_covid_data(data: list[read.CovidData], location: str, year: int) -> dict[str, list]:
+    """Return a dictionary of the covid data on the last day of each month for a specific year at a specific location
+
+    Preconditions:
+      - len(data) != 0
+      - location in PROV_AND_TERR or location == 'Canada'
+      - year >= 0
+    """
+    covid_in_location = get_monthly_cases(data, year, location)
+
+    return covid_data_to_dict(covid_in_location)
