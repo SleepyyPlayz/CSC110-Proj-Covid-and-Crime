@@ -7,8 +7,6 @@ Any reproduction of this code without permission from the authors is strictly pr
 
 This file is Copyright (c) 2021 Nicholas Poon, Raghav Srinivasan, Khushil Nagda, and Wangzheng Jiang.
 """
-import datetime
-
 import read
 
 CRIMES = {'assault', 'breaking and entering', 'domestic disturbance', 'dangerous operation', 'death', 'harm',
@@ -27,6 +25,7 @@ def filter_just_crimes(data: list[read.EmergencyCall]) -> list[read.EmergencyCal
     Preconditions:
       - len(data) != 0
 
+    >>> import datetime
     >>> call1 = read.EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 34)
     >>> call2 = read.EmergencyCall(datetime.date(2020, 2, 29), 'Ontario', \
@@ -55,6 +54,7 @@ def filter_crimes_by_type(data: list[read.EmergencyCall], filter_type: str) -> \
       - len(data) != 0
       - filter_type == 'public' or filter_type == 'physical'
 
+    >>> import datetime
     >>> call1 = read.EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 34)
     >>> call2 = read.EmergencyCall(datetime.date(2020, 2, 29), 'Ontario', \
@@ -94,6 +94,7 @@ def filter_crimes_by_location(data: list[read.EmergencyCall], location: str, yea
       - location in PROV_AND_TERR or location == "Canada"
       - year >= 0
 
+    >>> import datetime
     >>> call1 = read.EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 34)
     >>> call2 = read.EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
@@ -119,6 +120,7 @@ def get_monthly_cases(data: list[read.CovidData], year: int, location: str) -> l
       - year >= 0
       - location in PROV_AND_TERR or location == 'Canada'
 
+    >>> import datetime
     >>> covid_data1 = read.CovidData(datetime.date(2020, 1, 31), 'Ontario', 1, 1)
     >>> covid_data2 = read.CovidData(datetime.date(2020, 2, 29), 'Ontario', 1, 1)
     >>> covid_data3 = read.CovidData(datetime.date(2020, 1, 29), 'Ontario', 1, 1)
@@ -138,9 +140,9 @@ def get_monthly_cases(data: list[read.CovidData], year: int, location: str) -> l
 
 
 def check_if_monthly_case(covid_data: read.CovidData) -> bool:
-    """Return whether the CovidData instance is data for the last day of a certain month in a certain year for a
-    particular location
+    """Return whether the CovidData instance is data for the last day of any month.
 
+    >>> import datetime
     >>> covid_data1 = read.CovidData(datetime.date(2020, 1, 31), 'Ontario', 1, 1)
     >>> check_if_monthly_case(covid_data1)
     True
@@ -159,12 +161,13 @@ def check_if_monthly_case(covid_data: read.CovidData) -> bool:
 
 
 def covid_data_to_dict(data: list[read.CovidData]) -> dict[str: list]:
-    """Return a dictionary mapping the attributes of CovidData to a list of attributes for all the CovidData instances
-    in data
+    """Return a dictionary mapping relevant attributes of CovidData to a list of attributes for all the CovidData
+    instances in data
 
     Preconditions:
       - len(data) != 0
 
+    >>> import datetime
     >>> covid_data1 = read.CovidData(datetime.date(2020, 1, 1), 'Ontario', 1, 1)
     >>> expected = {'Date': [datetime.date(2020, 1, 1)], 'Number of Active Cases': [1], \
     'Number of Deaths': [1]}
@@ -182,13 +185,13 @@ def covid_data_to_dict(data: list[read.CovidData]) -> dict[str: list]:
 
 
 def emergency_call_to_dict(data: list[read.EmergencyCall]) -> dict[str, list]:
-    """Return a dictionary mapping the attributes of EmergencyCall to a list of attributes for all the EmergencyCall
-     instances in data
+    """Return a dictionary mapping the relevant attributes of EmergencyCall to a list of attributes for all the
+    EmergencyCall instances in data
 
     Preconditions:
       - len(data) != 0
 
-    >>> from pprint import pprint
+    >>> import datetime
     >>> call1 = read.EmergencyCall(datetime.date(2020, 1, 1), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 1)
     >>> expected = {'Date': [datetime.date(2020, 1, 1)], \
@@ -255,3 +258,14 @@ def get_covid_data(data: list[read.CovidData], location: str, year: int) -> dict
     covid_in_location = get_monthly_cases(data, year, location)
 
     return covid_data_to_dict(covid_in_location)
+
+
+# if __name__ == '__main__':
+    # import python_ta
+    #
+    # python_ta.check_all(config={
+    #     'extra-imports': ['read'],  # the names (strs) of imported modules
+    #     'allowed-io': [],  # the names (strs) of functions that call print/open/input
+    #     'max-line-length': 120,
+    #     'disable': ['R1705', 'C0200']
+    # })

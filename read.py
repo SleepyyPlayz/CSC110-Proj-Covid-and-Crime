@@ -250,3 +250,15 @@ def get_locations_only(filename: str) -> set[str]:
             locations.add(row[1])
 
     return locations
+
+
+# if __name__ == '__main__':
+    # import python_ta
+    #
+    # python_ta.check_all(config={
+    #     'extra-imports': ['datetime', 'csv'],  # the names (strs) of imported modules
+    #     'allowed-io': ['read_covid_data', 'read_police_data'],  # the names (strs) of functions that call
+    #                                                             # print/open/input
+    #     'max-line-length': 120,
+    #     'disable': ['R1705', 'C0200']
+    # })
