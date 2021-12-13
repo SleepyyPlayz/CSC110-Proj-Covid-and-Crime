@@ -40,7 +40,6 @@ for pt in read.PROV_AND_TERR:
 police_data_canada_2020_physical, police_data_canada_2020_non_physical = analyze.get_police_data(police_data_raw,
                                                                                                  'Canada', 2020,
                                                                                                  'physical')
-
 # Public and Private Crimes for Canada for 2020
 police_data_canada_2020_public, police_data_canada_2020_private = analyze.get_police_data(police_data_raw, 'Canada',
                                                                                           2020, 'public')
@@ -49,7 +48,6 @@ police_data_canada_2020_public, police_data_canada_2020_private = analyze.get_po
 police_data_canada_2021_physical, police_data_canada_2021_non_physical = analyze.get_police_data(police_data_raw,
                                                                                                  'Canada', 2021,
                                                                                                  'physical')
-
 # Public and Private Crimes for Canada for 2021
 police_data_canada_2021_public, police_data_canada_2021_private = analyze.get_police_data(police_data_raw, 'Canada',
                                                                                           2021, 'public')
@@ -115,7 +113,7 @@ if __name__ == '__main__':
 
 # STEP 1: Creating a Pandas Data Frame for Everything
 
-#COVID DATASET
+########################## COVID DATASET ##########################################################
 
 # Covid Data Frame for Canada for 2020
 covid_data_canada_2020_df = pd.DataFrame(covid_data_canada_2020)
@@ -136,3 +134,39 @@ for pt in read.PROV_AND_TERR:
     covid_data_2021 = analyze.get_covid_data(covid_data_raw, pt, 2021)
     covid_data_2021_df = pd.DataFrame(covid_data_2021)
     df_list_per_province_covid_data_2021.append(covid_data_2021_df)
+
+########################## CRIME DATASET ##########################################################
+
+# Physical and Non Physical Crimes for Canada for 2020 Data Frame
+police_data_canada_2020_physical_df = pd.DataFrame(police_data_canada_2020_physical)
+police_data_canada_2020_non_physical_df = pd.DataFrame(police_data_canada_2020_non_physical)
+
+# Public and Private Crimes for Canada for 2020 Data Frame
+police_data_canada_2020_public_df = pd.DataFrame(police_data_canada_2020_public)
+police_data_canada_2020_private_df = pd.DataFrame(police_data_canada_2020_private)
+
+# Physical and Non Physical Crimes for Canada for 2021
+police_data_canada_2021_physical_df = pd.DataFrame(police_data_canada_2021_physical)
+police_data_canada_2021_non_physical_df = pd.DataFrame(police_data_canada_2021_physical)
+
+# Public and Private Crimes for Canada for 2021
+police_data_canada_2021_public_df = pd.DataFrame(police_data_canada_2021_public)
+police_data_canada_2021_private_df = pd.DataFrame(police_data_canada_2021_private)
+
+# Total Physical and Non Physical Crimes for Canada for 2020
+total_police_data_canada_2020_physical_df = pd.DataFrame(total_police_data_canada_2020_physical)
+total_police_data_canada_2020_non_physical_df = pd.DataFrame(total_police_data_canada_2020_non_physical)
+
+# Total Public and Private Crimes for Canada for 2020
+total_police_data_canada_2020_public_df = pd.DataFrame(total_police_data_canada_2020_public)
+total_police_data_canada_2020_private_df = pd.DataFrame(total_police_data_canada_2020_private)
+
+# Total Physical and Non Physical Crimes for Canada for 2021
+total_police_data_canada_2021_physical_df = pd.DataFrame(total_police_data_canada_2021_physical)
+total_police_data_canada_2021_non_physical_df = pd.DataFrame(total_police_data_canada_2021_non_physical)
+
+# Total Public and Private Crimes for Canada for 2021
+total_police_data_canada_2021_public_df = pd.DataFrame(total_police_data_canada_2021_public)
+total_police_data_canada_2021_private_df = pd.DataFrame(total_police_data_canada_2021_private)
+
+
