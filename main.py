@@ -57,23 +57,27 @@ police_data_canada_2021_public, police_data_canada_2021_private = analyze.get_po
 
 # Total Physical and Non Physical Crimes for Canada for 2020
 total_police_data_canada_2020_physical = analyze.get_police_data_totals(police_data_canada_2020_physical, 'Physical',
-                                                                        2020)
+                                                                        2020, 'Canada')
 total_police_data_canada_2020_non_physical = analyze.get_police_data_totals(police_data_canada_2020_non_physical,
-                                                                            'Non Physical', 2020)
+                                                                            'Non Physical', 2020, 'Canada')
 
 # Total Public and Private Crimes for Canada for 2020
-total_police_data_canada_2020_public = analyze.get_police_data_totals(police_data_canada_2020_public, 'Public', 2020)
-total_police_data_canada_2020_private = analyze.get_police_data_totals(police_data_canada_2020_private, 'Private', 2020)
+total_police_data_canada_2020_public = analyze.get_police_data_totals(police_data_canada_2020_public, 'Public', 2020,
+                                                                      'Canada')
+total_police_data_canada_2020_private = analyze.get_police_data_totals(police_data_canada_2020_private, 'Private', 2020,
+                                                                       'Canada')
 
 # Total Physical and Non Physical Crimes for Canada for 2021
 total_police_data_canada_2021_physical = analyze.get_police_data_totals(police_data_canada_2021_physical, 'Physical',
-                                                                        2021)
+                                                                        2021, 'Canada')
 total_police_data_canada_2021_non_physical = analyze.get_police_data_totals(police_data_canada_2020_non_physical,
-                                                                            'Non Physical', 2021)
+                                                                            'Non Physical', 2021, 'Canada')
 
 # Total Public and Private Crimes for Canada for 2021
-total_police_data_canada_2021_public = analyze.get_police_data_totals(police_data_canada_2021_public, 'Public', 2021)
-total_police_data_canada_2021_private = analyze.get_police_data_totals(police_data_canada_2021_private, 'Private', 2021)
+total_police_data_canada_2021_public = analyze.get_police_data_totals(police_data_canada_2021_public, 'Public', 2021,
+                                                                      'Canada')
+total_police_data_canada_2021_private = analyze.get_police_data_totals(police_data_canada_2021_private, 'Private', 2021,
+                                                                       'Canada')
 
 # THESE VARIABLES CONTAIN THE TOTALS OF INDIVIDUAL GROUPS OF CRIMES AND THE TOTAL OF INDIVIDUAL CRIMES
 # THAT FALL UNDER THE SAME CATEGORY e.g. Assaults by family and Total assaults in that order
@@ -83,29 +87,29 @@ total_police_data_canada_2021_private = analyze.get_police_data_totals(police_da
 for pt in read.PROV_AND_TERR:
     police_data_2020_physical, police_data_2020_non_physical = analyze.get_police_data(police_data_raw, pt, 2020,
                                                                                        'physical')
-    total_police_data_2020_physical = analyze.get_police_data_totals(police_data_2020_physical, 'Physical', 2020)
+    total_police_data_2020_physical = analyze.get_police_data_totals(police_data_2020_physical, 'Physical', 2020, pt)
     total_police_data_2020_non_physical = analyze.get_police_data_totals(police_data_2020_non_physical, 'Non Physical',
-                                                                         2020)
+                                                                         2020, pt)
 
 # Public and Private Crimes (Total and Non-Total) for Each Province for 2020
 for pt in read.PROV_AND_TERR:
     police_data_2020_public, police_data_2020_private = analyze.get_police_data(police_data_raw, pt, 2020, 'public')
-    total_police_data_2020_public = analyze.get_police_data_totals(police_data_2020_public, 'Public', 2020)
-    total_police_data_2020_private = analyze.get_police_data_totals(police_data_2020_private, 'Private', 2020)
+    total_police_data_2020_public = analyze.get_police_data_totals(police_data_2020_public, 'Public', 2020, pt)
+    total_police_data_2020_private = analyze.get_police_data_totals(police_data_2020_private, 'Private', 2020, pt)
 
 # Physical and Non Physical Crimes (Total and Non-Total) for Each Province for 2021
 for pt in read.PROV_AND_TERR:
     police_data_2021_physical, police_data_2021_non_physical = analyze.get_police_data(police_data_raw, pt, 2021,
                                                                                        'physical')
-    total_police_data_2021_physical = analyze.get_police_data_totals(police_data_2021_physical, 'Physical', 2021)
+    total_police_data_2021_physical = analyze.get_police_data_totals(police_data_2021_physical, 'Physical', 2021, pt)
     total_police_data_2021_non_physical = analyze.get_police_data_totals(police_data_2021_non_physical, 'Non Physical',
-                                                                         2021)
+                                                                         2021, pt)
 
 # Public and Private Crimes (Total and Non-Total) for Each Province for 2021
 for pt in read.PROV_AND_TERR:
     police_data_2021_public, police_data_2021_private = analyze.get_police_data(police_data_raw, pt, 2021, 'public')
-    total_police_data_2021_public = analyze.get_police_data_totals(police_data_2021_public, 'Public', 2021)
-    total_police_data_2021_private = analyze.get_police_data_totals(police_data_2021_private, 'Private', 2021)
+    total_police_data_2021_public = analyze.get_police_data_totals(police_data_2021_public, 'Public', 2021, pt)
+    total_police_data_2021_private = analyze.get_police_data_totals(police_data_2021_private, 'Private', 2021, pt)
 
 # STEP 1: Creating a Pandas Data Frame for Everything
 
@@ -174,9 +178,9 @@ df_list_per_province_total_police_data_2020_non_physical = []
 for pt in read.PROV_AND_TERR:
     police_data_2020_physical, police_data_2020_non_physical = analyze.get_police_data(police_data_raw, pt, 2020,
                                                                                        'physical')
-    total_police_data_2020_physical = analyze.get_police_data_totals(police_data_2020_physical, 'Physical', 2020)
+    total_police_data_2020_physical = analyze.get_police_data_totals(police_data_2020_physical, 'Physical', 2020, pt)
     total_police_data_2020_non_physical = analyze.get_police_data_totals(police_data_2020_non_physical, 'Non Physical',
-                                                                         2020)
+                                                                         2020, pt)
 
     police_data_2020_physical_df = pd.DataFrame(police_data_2020_physical)
     police_data_2020_non_physical_df = pd.DataFrame(police_data_2020_non_physical)
@@ -195,8 +199,8 @@ df_list_per_province_total_police_data_2020_public = []
 df_list_per_province_total_police_data_2020_private = []
 for pt in read.PROV_AND_TERR:
     police_data_2020_public, police_data_2020_private = analyze.get_police_data(police_data_raw, pt, 2020, 'public')
-    total_police_data_2020_public = analyze.get_police_data_totals(police_data_2020_public, 'Public', 2020)
-    total_police_data_2020_private = analyze.get_police_data_totals(police_data_2020_private, 'Private', 2020)
+    total_police_data_2020_public = analyze.get_police_data_totals(police_data_2020_public, 'Public', 2020, pt)
+    total_police_data_2020_private = analyze.get_police_data_totals(police_data_2020_private, 'Private', 2020, pt)
 
     police_data_2020_public_df = pd.DataFrame(police_data_2020_public)
     police_data_2020_private_df = pd.DataFrame(police_data_2020_private)
@@ -216,9 +220,9 @@ df_list_per_province_total_police_data_2021_non_physical = []
 for pt in read.PROV_AND_TERR:
     police_data_2021_physical, police_data_2021_non_physical = analyze.get_police_data(police_data_raw, pt, 2021,
                                                                                        'physical')
-    total_police_data_2021_physical = analyze.get_police_data_totals(police_data_2021_physical, 'Physical', 2021)
+    total_police_data_2021_physical = analyze.get_police_data_totals(police_data_2021_physical, 'Physical', 2021, pt)
     total_police_data_2021_non_physical = analyze.get_police_data_totals(police_data_2021_non_physical, 'Non Physical',
-                                                                         2021)
+                                                                         2021, pt)
 
     police_data_2021_physical_df = pd.DataFrame(police_data_2021_physical)
     police_data_2021_non_physical_df = pd.DataFrame(police_data_2021_non_physical)
@@ -237,8 +241,8 @@ df_list_per_province_total_police_data_2021_public = []
 df_list_per_province_total_police_data_2021_private = []
 for pt in read.PROV_AND_TERR:
     police_data_2021_public, police_data_2021_private = analyze.get_police_data(police_data_raw, pt, 2021, 'public')
-    total_police_data_2021_public = analyze.get_police_data_totals(police_data_2021_public, 'Public', 2021)
-    total_police_data_2021_private = analyze.get_police_data_totals(police_data_2021_private, 'Private', 2021)
+    total_police_data_2021_public = analyze.get_police_data_totals(police_data_2021_public, 'Public', 2021, pt)
+    total_police_data_2021_private = analyze.get_police_data_totals(police_data_2021_private, 'Private', 2021, pt)
 
     police_data_2021_public_df = pd.DataFrame(police_data_2021_public)
     police_data_2021_private_df = pd.DataFrame(police_data_2021_private)

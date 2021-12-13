@@ -162,12 +162,13 @@ def check_if_monthly_case(covid_data: read.CovidData) -> bool:
     return False
 
 
-def covid_data_to_dict(data: list[read.CovidData]) -> dict[str: list]:
+def covid_data_to_dict(data: list[read.CovidData], location: str) -> dict[str: list]:
     """Return a dictionary mapping relevant attributes of CovidData to a list of attributes for all the CovidData
     instances in data
 
     Preconditions:
       - len(data) != 0
+      - location in PROV_AND_TERR or location == 'Canada'
 
     >>> import datetime
     >>> covid_data1 = read.CovidData(datetime.date(2020, 1, 1), 'Ontario', 1, 1)
@@ -176,12 +177,12 @@ def covid_data_to_dict(data: list[read.CovidData]) -> dict[str: list]:
     >>> covid_data_to_dict([covid_data1]) == expected
     True
     """
-    dict_so_far = {'Date': [], 'Number of Active Cases': [], 'Number of Deaths': []}
+    dict_so_far = {'Date': [], f'Number of Active Cases in {location}': [], f'Number of Deaths in {location}': []}
 
     for covid_data in data:
         dict_so_far['Date'].append(covid_data.date)
-        dict_so_far['Number of Active Cases'].append(covid_data.get_num_active())
-        dict_so_far['Number of Deaths'].append(covid_data.get_num_deaths())
+        dict_so_far[f'Number of Active Cases in {location}'].append(covid_data.get_num_active())
+        dict_so_far[f'Number of Deaths in {location}'].append(covid_data.get_num_deaths())
 
     return dict_so_far
 
@@ -232,15 +233,17 @@ def get_police_data(data: list[read.EmergencyCall], location: str, year: int, ca
     return category_dict, opp_category_dict
 
 
-def get_police_data_totals(data_dict: dict[str, list], category: str, year: int) -> dict[str, list]:
+def get_police_data_totals(data_dict: dict[str, list], category: str, year: int, location: str) -> dict[str, list]:
     """Return a new dictionary with the only keys being the date and total category. For the values for total category,
     add all instances of category for each month
 
     Preconditions:
       - len(data_dict) != 0
       - category in {'Physical', 'Non Physical', 'Public', 'Private'}
+      - year >= 0
+      - location in PROV_AND_TERR or location == 'Canada'
     """
-    key_name = f'Total {category} Crimes'
+    key_name = f'Total {category} Crimes in {location}'
 
     total_dict_so_far = {'Date': [datetime.date(year, month, read.DAYS_PER_MONTH[month])
                                   for month in read.DAYS_PER_MONTH], key_name: [0 for _ in range(12)]}
@@ -266,7 +269,7 @@ def get_covid_data(data: list[read.CovidData], location: str, year: int) -> dict
     """
     covid_in_location = get_monthly_cases(data, year, location)
 
-    return covid_data_to_dict(covid_in_location)
+    return covid_data_to_dict(covid_in_location, location)
 
 
 # if __name__ == '__main__':
