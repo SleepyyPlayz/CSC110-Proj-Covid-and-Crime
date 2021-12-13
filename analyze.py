@@ -280,7 +280,7 @@ def get_covid_data(data: list[read.CovidData], location: str, year: int) -> dict
 #     python_ta.contracts.check_all_contracts()
 #
 #     python_ta.check_all(config={
-#         'extra-imports': ['read'],  # the names (strs) of imported modules
+#         'extra-imports': ['datetime', 'read'],  # the names (strs) of imported modules
 #         'allowed-io': [],  # the names (strs) of functions that call print/open/input
 #         'max-line-length': 120,
 #         'disable': ['R1705', 'C0200']
