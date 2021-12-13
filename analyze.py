@@ -27,7 +27,6 @@ def filter_just_crimes(data: list[read.EmergencyCall]) -> list[read.EmergencyCal
     Preconditions:
       - len(data) != 0
 
-    >>> import datetime
     >>> call1 = read.EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 34)
     >>> call2 = read.EmergencyCall(datetime.date(2020, 2, 29), 'Ontario', \
@@ -56,7 +55,6 @@ def filter_crimes_by_type(data: list[read.EmergencyCall], filter_type: str) -> \
       - len(data) != 0
       - filter_type == 'public' or filter_type == 'physical'
 
-    >>> import datetime
     >>> call1 = read.EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 34)
     >>> call2 = read.EmergencyCall(datetime.date(2020, 2, 29), 'Ontario', \
@@ -96,7 +94,6 @@ def filter_crimes_by_location(data: list[read.EmergencyCall], location: str, yea
       - location in PROV_AND_TERR or location == "Canada"
       - year >= 0
 
-    >>> import datetime
     >>> call1 = read.EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 34)
     >>> call2 = read.EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
@@ -122,7 +119,6 @@ def get_monthly_cases(data: list[read.CovidData], year: int, location: str) -> l
       - year >= 0
       - location in PROV_AND_TERR or location == 'Canada'
 
-    >>> import datetime
     >>> covid_data1 = read.CovidData(datetime.date(2020, 1, 31), 'Ontario', 1, 1)
     >>> covid_data2 = read.CovidData(datetime.date(2020, 2, 29), 'Ontario', 1, 1)
     >>> covid_data3 = read.CovidData(datetime.date(2020, 1, 29), 'Ontario', 1, 1)
@@ -144,7 +140,6 @@ def get_monthly_cases(data: list[read.CovidData], year: int, location: str) -> l
 def check_if_monthly_case(covid_data: read.CovidData) -> bool:
     """Return whether the CovidData instance is data for the last day of any month.
 
-    >>> import datetime
     >>> covid_data1 = read.CovidData(datetime.date(2020, 1, 31), 'Ontario', 1, 1)
     >>> check_if_monthly_case(covid_data1)
     True
@@ -170,11 +165,10 @@ def covid_data_to_dict(data: list[read.CovidData], location: str) -> dict[str: l
       - len(data) != 0
       - location in PROV_AND_TERR or location == 'Canada'
 
-    >>> import datetime
     >>> covid_data1 = read.CovidData(datetime.date(2020, 1, 1), 'Ontario', 1, 1)
-    >>> expected = {'Date': [datetime.date(2020, 1, 1)], 'Number of Active Cases': [1], \
-    'Number of Deaths': [1]}
-    >>> covid_data_to_dict([covid_data1]) == expected
+    >>> expected = {'Date': [datetime.date(2020, 1, 1)], 'Number of Active Cases in Ontario': [1], \
+    'Number of Deaths in Ontario': [1]}
+    >>> covid_data_to_dict([covid_data1], 'Ontario') == expected
     True
     """
     dict_so_far = {'Date': [], f'Number of Active Cases in {location}': [], f'Number of Deaths in {location}': []}
@@ -194,7 +188,6 @@ def emergency_call_to_dict(data: list[read.EmergencyCall]) -> dict[str, list]:
     Preconditions:
       - len(data) != 0
 
-    >>> import datetime
     >>> call1 = read.EmergencyCall(datetime.date(2020, 1, 1), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 1)
     >>> expected = {'Date': [datetime.date(2020, 1, 1)], \
