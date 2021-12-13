@@ -7,10 +7,11 @@ Any reproduction of this code without permission from the authors is strictly pr
 
 This file is Copyright (c) 2021 Nicholas Poon, Raghav Srinivasan, Khushil Nagda, and Wangzheng Jiang.
 """
-import matplotlib
-import pandas
+import matplotlib as plt
+import pandas as pd
 import statsmodels
 
+from pprint import pprint
 import read
 import analyze
 
@@ -31,6 +32,10 @@ covid_data_canada_2021 = analyze.get_covid_data(covid_data_raw, 'Canada', 2021)
 for pt in read.PROV_AND_TERR:
     covid_data_2021 = analyze.get_covid_data(covid_data_raw, pt, 2021)
 
+# THESE VARIABLES CONTAIN THE TOTALS OF INDIVIDUAL GROUPS OF CRIMES AND THE TOTAL OF INDIVIDUAL CRIMES
+# THAT FALL UNDER THE SAME CATEGORY e.g. Assaults by family and Total assaults in that order
+# COVERS WHOLE OF CANADA
+
 # Physical and Non Physical Crimes for Canada for 2020
 police_data_canada_2020_physical, police_data_canada_2020_non_physical = analyze.get_police_data(police_data_raw,
                                                                                                  'Canada', 2020,
@@ -48,6 +53,9 @@ police_data_canada_2021_physical, police_data_canada_2021_non_physical = analyze
 # Public and Private Crimes for Canada for 2021
 police_data_canada_2021_public, police_data_canada_2021_private = analyze.get_police_data(police_data_raw, 'Canada',
                                                                                           2021, 'public')
+# THESE VARIABLES CONTAIN JUST THE TOTALS OF INDIVIDUAL CRIMES THAT FALL UNDER THE SAME CATEGORY e.g.
+# Total assaults
+# COVERS WHOLE OF CANADA
 
 # Total Physical and Non Physical Crimes for Canada for 2020
 total_police_data_canada_2020_physical = analyze.get_police_data_totals(police_data_canada_2020_physical)
@@ -64,6 +72,10 @@ total_police_data_canada_2021_non_physical = analyze.get_police_data_totals(poli
 # Total Public and Private Crimes for Canada for 2021
 total_police_data_canada_2021_public = analyze.get_police_data_totals(police_data_canada_2021_public)
 total_police_data_canada_2021_private = analyze.get_police_data_totals(police_data_canada_2021_private)
+
+# THESE VARIABLES CONTAIN THE TOTALS OF INDIVIDUAL GROUPS OF CRIMES AND THE TOTAL OF INDIVIDUAL CRIMES
+# THAT FALL UNDER THE SAME CATEGORY e.g. Assaults by family and Total assaults in that order
+# COVERS EACH PROVINCE
 
 # Physical and Non Physical Crimes (Total and Non-Total) for Each Province for 2020
 for pt in read.PROV_AND_TERR:
@@ -85,14 +97,42 @@ for pt in read.PROV_AND_TERR:
     total_police_data_2021_physical = analyze.get_police_data_totals(police_data_2021_physical)
     total_police_data_2021_non_physical = analyze.get_police_data_totals(police_data_2021_non_physical)
 
+    # pprint(police_data_2021_physical)
+    # pprint(total_police_data_2021_physical)
+
 # Public and Private Crimes (Total and Non-Total) for Each Province for 2021
 for pt in read.PROV_AND_TERR:
     police_data_2021_public, police_data_2021_private = analyze.get_police_data(police_data_raw, pt, 2021, 'public')
     total_police_data_2021_public = analyze.get_police_data_totals(police_data_2021_public)
     total_police_data_2021_private = analyze.get_police_data_totals(police_data_2021_private)
-
+print("hello")
 if __name__ == '__main__':
     from pprint import pprint
-    pprint(covid_data_canada_2020)
-    pprint(police_data_canada_2020_physical)
-    pprint(total_police_data_canada_2020_physical)
+    # pprint(covid_data_canada_2020)
+    # pprint(police_data_canada_2020_physical)
+    # pprint(total_police_data_canada_2020_physical)
+
+
+# STEP 1: Creating a Pandas Data Frame for Everything
+
+#COVID DATASET
+
+# Covid Data Frame for Canada for 2020
+covid_data_canada_2020_df = pd.DataFrame(covid_data_canada_2020)
+
+# Creating a list of Covid Data Frames for Each Province for Covid Data 2020,
+df_list_per_province_covid_data_2020  = []
+for pt in read.PROV_AND_TERR:
+    covid_data_2020 = analyze.get_covid_data(covid_data_raw, pt, 2020)
+    covid_data_2020_df = pd.DataFrame(covid_data_2020)
+    df_list_per_province_covid_data_2020.append(covid_data_2020_df)
+
+# Covid Data Frame for Canada for 2021
+covid_data_canada_2021_df = pd.DataFrame(covid_data_canada_2021)
+
+# Creating a list of Covid Data Frames for Each Province for Covid Data 2020,
+df_list_per_province_covid_data_2021 = []
+for pt in read.PROV_AND_TERR:
+    covid_data_2021 = analyze.get_covid_data(covid_data_raw, pt, 2021)
+    covid_data_2021_df = pd.DataFrame(covid_data_2021)
+    df_list_per_province_covid_data_2021.append(covid_data_2021_df)
