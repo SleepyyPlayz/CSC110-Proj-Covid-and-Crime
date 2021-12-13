@@ -232,7 +232,7 @@ def get_police_data(data: list[read.EmergencyCall], location: str, year: int, ca
     return category_dict, opp_category_dict
 
 
-def get_police_data_totals(data_dict: dict[str, list], category: str) -> dict[str, list]:
+def get_police_data_totals(data_dict: dict[str, list], category: str, year: int) -> dict[str, list]:
     """Return a new dictionary with the only keys being the date and total category. For the values for total category,
     add all instances of category for each month
 
@@ -241,11 +241,11 @@ def get_police_data_totals(data_dict: dict[str, list], category: str) -> dict[st
       - category in {'Physical', 'Non Physical', 'Public', 'Private'}
     """
     key_name = f'Total {category} Crimes'
-    year = data_dict['Date'][0].year
+
     total_dict_so_far = {'Date': [datetime.date(year, month, read.DAYS_PER_MONTH[month])
                                   for month in read.DAYS_PER_MONTH], key_name: [0 for _ in range(12)]}
 
-    if total_dict_so_far['Date'][1].year % 4 == 0 and total_dict_so_far['Date'][1].month == 2:
+    if year % 4 == 0 and total_dict_so_far['Date'][1].month == 2:
         total_dict_so_far['Date'][1] = datetime.date(total_dict_so_far['Date'][1].year, 2, 29)
 
     for i in range(len(data_dict['Date'])):
