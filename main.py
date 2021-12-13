@@ -81,9 +81,9 @@ total_police_data_canada_2021_private = analyze.get_police_data_totals(police_da
 for pt in read.PROV_AND_TERR:
     police_data_2020_physical, police_data_2020_non_physical = analyze.get_police_data(police_data_raw, pt, 2020,
                                                                                        'physical')
-    if len(police_data_2020_physical) != 0:
+    if len(police_data_2020_physical['Date']) != 0:
         total_police_data_2020_physical = analyze.get_police_data_totals(police_data_2020_physical, 'Physical')
-    if len(police_data_2020_non_physical) != 0:
+    if len(police_data_2020_non_physical['Date']) != 0:
         total_police_data_2020_non_physical = analyze.get_police_data_totals(police_data_2020_non_physical,
                                                                              'Non Physical')
 
