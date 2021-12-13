@@ -7,6 +7,8 @@ Any reproduction of this code without permission from the authors is strictly pr
 
 This file is Copyright (c) 2021 Nicholas Poon, Raghav Srinivasan, Khushil Nagda, and Wangzheng Jiang.
 """
+import datetime
+
 import read
 
 CRIMES = {'assault', 'breaking and entering', 'domestic disturbance', 'dangerous operation', 'death', 'harm',
@@ -230,19 +232,26 @@ def get_police_data(data: list[read.EmergencyCall], location: str, year: int, ca
     return category_dict, opp_category_dict
 
 
-def get_police_data_totals(data_dict: dict[str, list]) -> dict[str, list]:
-    """Return a new dictionary with the same keys. For the values, only append the data that track the total crimes
+def get_police_data_totals(data_dict: dict[str, list], category: str) -> dict[str, list]:
+    """Return a new dictionary with the only keys being the date and total category. For the values for total category,
+    add all instances of category for each month
 
     Preconditions:
       - len(data_dict) != 0
+      - category in {'Physical', 'Non Physical', 'Public', 'Private'}
     """
-    total_dict_so_far = {'Date': [], 'Emergency': [], 'Number of Incidents': []}
+    key_name = f'Total {category} Crimes'
+    year = data_dict['Date'][0].year
+    total_dict_so_far = {'Date': [datetime.date(year, month, read.DAYS_PER_MONTH[month])
+                                  for month in read.DAYS_PER_MONTH], key_name: [0 for _ in range(12)]}
+
+    if total_dict_so_far['Date'][1].year % 4 == 0 and total_dict_so_far['Date'][1].month == 2:
+        total_dict_so_far['Date'][1] = datetime.date(total_dict_so_far['Date'][1].year, 2, 29)
 
     for i in range(len(data_dict['Date'])):
         if 'Total' in data_dict['Emergency'][i]:
-            total_dict_so_far['Date'].append(data_dict['Date'][i])
-            total_dict_so_far['Emergency'].append(data_dict['Emergency'][i])
-            total_dict_so_far['Number of Incidents'].append(data_dict['Number of Incidents'][i])
+            index = data_dict['Date'][i].month - 1
+            total_dict_so_far[key_name][index] += data_dict['Number of Incidents'][i]
 
     return total_dict_so_far
 

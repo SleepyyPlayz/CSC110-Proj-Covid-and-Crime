@@ -148,7 +148,11 @@ def read_police_data(filename: str) -> list[EmergencyCall]:
 
         for row in reader:
             date = police_data_str_to_date(row[0])
-            location = det_location(row[1])
+            if "Royal Canadian Mounted Police" not in row[1]:
+                location = det_location(row[1])
+            else:
+                continue
+
             if row[11] == '':
                 incidences = 0
             else:
