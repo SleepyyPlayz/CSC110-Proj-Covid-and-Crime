@@ -15,43 +15,47 @@ PROV_AND_TERR = ['British Columbia', 'Alberta', 'Saskatchewan', 'Manitoba', 'Ont
                  'Northwest Territories', 'Nunavut', 'Yukon']
 
 # Covid Cases Graph for Canada for 2020 and 2021
-date_20_21 = df.covid_data_canada_20_21_df['Date']
-cases_20_21 = df.covid_data_canada_20_21_df['Number of New Active Cases in Canada']
+# date_20_21 = df.covid_data_canada_20_21_df['Date']
+# cases_20_21 = df.covid_data_canada_20_21_df['Number of New Active Cases in Canada']
+# physical_crimes_20_21 = df.total_police_data_canada_20_21_physical_df['Total Physical Crimes in Canada']
+#
+# covid_crime_canada_20_21 = plt.figure()
 
-covid_canada_20_21 = plt.figure()
-covid_canada_20_21_axes = covid_canada_20_21.add_axes([0.1, 0.1, 0.8, 0.8])
-covid_canada_20_21_axes.plot(date_20_21, cases_20_21)
+#covid_canada_20_21_axes = covid_crime_canada_20_21.add_axes([0.1, 0.1, 0.8, 0.8])
+# fig = plt.figure()
+# physical_crimes_canada_20_21_axes = fig.add_axes([0.1, 0.1, 0.8, 0.8])
 
-
+#covid_canada_20_21_axes.plot(date_20_21, cases_20_21)
+# date_20_21 = df.total_police_data_canada_20_21_non_physical_df['Date']
+# physical_crimes_canada_20_21_axes.plot(date_20_21, physical_crimes_20_21)
 
 # Total Physical Crimes Graph for Canada for 2020 and 2021
 # date_20_21 = df.total_police_data_canada_20_21_physical_df['Date']
-physical_crimes_20_21 = df.total_police_data_canada_20_21_physical_df['Total Physical Crimes in Canada']
+
 # physical_crimes_canada_20_21 = plt.figure(1)
-# physical_crimes_canada_20_21_axes = physical_crimes_canada_20_21.add_axes([0.1, 0.1, 0.8, 0.8])
-# physical_crimes_canada_20_21_axes.plot(date_20_21, physical_crimes_20_21)
-covid_canada_20_21_axes.plot(date_20_21, physical_crimes_20_21)
+
+#covid_canada_20_21_axes.plot(date_20_21, physical_crimes_20_21)
 
 # Total Non Physical Crimes Graph for Canada for 2020 and 2021
 # date_20_21 = df.total_police_data_canada_20_21_non_physical_df['Date']
-non_physical_crimes_20_21 = \
-     df.total_police_data_canada_20_21_non_physical_df['Total Non Physical Crimes in Canada']
+# non_physical_crimes_20_21 = \
+#      df.total_police_data_canada_20_21_non_physical_df['Total Non Physical Crimes in Canada']
 # non_physical_crimes_canada_20_21 = plt.figure()
 # non_physical_crimes_canada_20_21_axes = non_physical_crimes_canada_20_21.add_axes([0.1, 0.1, 0.8, 0.8])
 # non_physical_crimes_canada_20_21_axes.plot(date_20_21, non_physical_crimes_20_21)
 
 # Total Public Crimes Graph for Canada for 2020 and 2021
 # date_20_21 = df.total_police_data_canada_20_21_public_df['Date']
-public_crimes_20_21 = \
-     df.total_police_data_canada_20_21_public_df['Total Public Crimes in Canada']
+# public_crimes_20_21 = \
+#      df.total_police_data_canada_20_21_public_df['Total Public Crimes in Canada']
 # public_crimes_canada_20_21 = plt.figure()
 # public_crimes_canada_20_21_axes = public_crimes_canada_20_21.add_axes([0.1, 0.1, 0.8, 0.8])
 # public_crimes_canada_20_21_axes.plot(date_20_21, public_crimes_20_21)
 
 # Total Private Crimes Graph for Canada for 2020 and 2021
 # date_20_21 = df.total_police_data_canada_20_21_private_df['Date']
-private_crimes_20_21 = \
-     df.total_police_data_canada_20_21_private_df['Total Private Crimes in Canada']
+# private_crimes_20_21 = \
+#      df.total_police_data_canada_20_21_private_df['Total Private Crimes in Canada']
 # private_crimes_canada_20_21 = plt.figure()
 # private_crimes_canada_20_21_axes = private_crimes_canada_20_21.add_axes([0.1, 0.1, 0.8, 0.8])
 # private_crimes_canada_20_21_axes.plot(date_20_21, private_crimes_20_21)
@@ -65,47 +69,49 @@ private_crimes_20_21 = \
 # ---------------------------- Tkinter Program -------------------------------------------------- #
 root = tk.Tk()
 root.title('Visualizing Covid Data')
-root.geometry('600x600')
+root.geometry('900x300')
+root.configure(background="#FFFFFF")
 
-def canada_covid_crime(y_axes):
-    title_variable = "Total Physical Crimes in Canada"
+title_font = ("Arial", 16, "bold")
+paragraph_font = ("Arial", 12, "normal")
 
-    if y_axes == "Physical" or y_axes == "physical":
-        crime_axes = df.total_police_data_canada_20_21_physical_df['Total Physical Crimes in Canada']
-    elif y_axes == "Non Physical" or y_axes == "non physical":
-        crime_axes = \
-            df.total_police_data_canada_20_21_non_physical_df['Total Non Physical Crimes in Canada']
-    elif y_axes == "Public" or y_axes == "public":
-        crime_axes = \
-            df.total_police_data_canada_20_21_public_df['Total Public Crimes in Canada']
-    elif y_axes == "Private" or y_axes == "private":
-        crime_axes = \
-            df.total_police_data_canada_20_21_private_df['Total Private Crimes in Canada']
-    else:
-        print("Please Enter a Valid Value")
+frame_heading_1 = tk.Label(root, text = "Visualising the relationship between Total Covid Cases in Canada and "
+                                                     "Crime Rates", font = title_font)
+frame_heading_1.grid(row=0, column=0, columnspan = "15", sticky = "W")
+
+def canada_covid_crime():
     date_20_21 = df.covid_data_canada_20_21_df['Date']
     cases_20_21 = df.covid_data_canada_20_21_df['Number of New Active Cases in Canada']
-    covid_canada_20_21 = plt.figure()
-    covid_canada_20_21_axes = covid_canada_20_21.add_axes([0.1, 0.1, 0.8, 0.8])
-    covid_canada_20_21_axes.plot(date_20_21, cases_20_21)
-    covid_canada_20_21_axes.set_title('Covid Cases and ' + title_variable)
+    physical_20_21 = df.total_police_data_canada_20_21_physical_df['Total Physical Crimes in Canada']
+    non_physical_20_21 = df.total_police_data_canada_20_21_non_physical_df['Total Non Physical Crimes in Canada']
+    public_axes_20_21 = df.total_police_data_canada_20_21_public_df['Total Public Crimes in Canada']
+    private_axes_20_21 = df.total_police_data_canada_20_21_private_df['Total Private Crimes in Canada']
 
-    covid_canada_20_21_axes.plot(date_20_21, crime_axes)
+    crime_covid_canada_20_21 = plt.figure()
 
-input_graph_type = tk.Entry(root, width=100, text="this is a text box")
-input_graph_type.pack()
-myB = tk.Button(text="Click to Graph", command = lambda: canada_covid_crime(input_graph_type.get()))
-myB.pack()
+    covid_canada_20_21_axes = crime_covid_canada_20_21.add_axes([0.1, 0.1, 0.8, 0.8])
+    covid_canada_20_21_axes.plot(date_20_21, cases_20_21, label= 'Covid Cases')
+    covid_canada_20_21_axes.plot(date_20_21, physical_20_21.iloc[0:20], label='Physical Crime Cases')
+    covid_canada_20_21_axes.plot(date_20_21, non_physical_20_21.iloc[0:20], label=' Non Physical Crime Cases')
+    covid_canada_20_21_axes.plot(date_20_21, public_axes_20_21.iloc[0:20], label='Public Crime Cases')
+    covid_canada_20_21_axes.plot(date_20_21, private_axes_20_21.iloc[0:20], label='Private Crime Cases')
+
+    # Formatting thr graph
+    covid_canada_20_21_axes.set_title('Covid Cases and Crime Rate Overview')
+    covid_canada_20_21_axes.set_xlabel('Month')
+    covid_canada_20_21_axes.set_ylabel('Count')
+    covid_canada_20_21_axes.legend()
+
+    status = tk.Label(root, text="Graph Successfully Plotted", font=paragraph_font)
+    status.grid(row=7, column=0, sticky="WE")
+
+graph_button_1 = tk.Button(root, text="Graph It!", command = canada_covid_crime)
+graph_button_1.grid(row=8,column=0)
+
 
 
 # ------------------------------  Formatting + Necessary Code ----------------------------- #
 root.mainloop()
-
-# ------------------------------------- MAIN RUNNING SECTION --------------------------------- #
-if __name__ == '__main__':
-    from pprint import pprint
-    #print(physical_crimes_2020)
-    #print(covid_canada_2021)
 
 
 
