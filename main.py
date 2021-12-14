@@ -10,6 +10,9 @@ This file is Copyright (c) 2021 Nicholas Poon, Raghav Srinivasan, Khushil Nagda,
 import tkinter as tk, dataframes as df
 import matplotlib.pyplot as plt
 
+PROV_AND_TERR = ['British Columbia', 'Alberta', 'Saskatchewan', 'Manitoba', 'Ontario', 'Quebec',
+                 'Newfoundland and Labrador', 'New Brunswick', 'Nova Scotia', 'Prince Edward Island',
+                 'Northwest Territories', 'Nunavut', 'Yukon']
 
 # Covid Cases Graph for Canada for 2020 and 2021
 date_20_21 = df.covid_data_canada_20_21_df['Date']
@@ -18,6 +21,15 @@ covid_canada_20_21 = plt.figure()
 covid_canada_20_21_axes = covid_canada_20_21.add_axes([0.1, 0.1, 0.8, 0.8])
 covid_canada_20_21_axes.plot(date_20_21, cases_20_21)
 
+# Covid Cases per Province Graph for Canada for 2020 and 2021
+
+# Graph for Total Physical Crimes for Each Province for 2020
+final_df_list_per_province_total_police_data_2020_physical
+date_20_21 = df.covid_data_canada_20_21_df['Date']
+cases_20_21 = df.covid_data_canada_20_21_df['Number of Active Cases in Canada']
+covid_canada_20_21 = plt.figure()
+covid_canada_20_21_axes = covid_canada_20_21.add_axes([0.1, 0.1, 0.8, 0.8])
+covid_canada_20_21_axes.plot(date_20_21, cases_20_21)
 
 
 
