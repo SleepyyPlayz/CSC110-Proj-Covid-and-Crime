@@ -57,11 +57,13 @@ Then in order to find correlations (or lack thereof) between different types of 
 
 Finally, in order to present our findings visually in a GUI, we used \verb+matplotlib.pyplot+ and \verb+Tkinter+, which allows us to present our graphs both visually and interactively. In total, we have 5 graphs as part of our final product. The first graph contains COVID data per month from early 2020 till now as well as crime data for the four different types of crime we analyzed: physical, non-physical, public, and private crime. The next four graphs contain scatterplots that display the correlation between COVID and each of the four types of crime, and using statistical analysis, we found the correlation for each, the results of which will be presented in the Discussion section.
 
-\section{Dataset Instructions}
+\section{Instructions}
 
 In order to download the two necessary datasets used in this project, navigate to the first two links listed in the references below. The first link should yield the crimes dataset, where the \verb+csv+ file can be downloaded. The second link should yield the COVID-19 dataset at the very bottom left of the page. The file name should be \verb+covid19-download.csv+ for the second dataset. The crime dataset file should be renamed to \verb+police_data.csv+ and the COVID dataset file should be renamed to \verb+covid_data.csv+. If this doesn’t work, navigate to this Github repository to download the files:\\ \verb+https://github.com/rsrinivasan1/Datasets-for-CSC110-Project+
 
 After downloading both files, they should be placed in a directory titled \verb+data_sets+ so that they can be accessed by our project. You can run our project by running the \verb+main.py+ file.
+
+In the pop-up windows that shows up, there should be five buttons, each of which correspond to a graph of our final data results as described above.
 
 \section{Changes since Proposal}
 For the most part, we stuck to the project plan outlined in the proposal for the final submission. However, we did encounter some issues with graphing the data once we aggregated it into \verb+pandas+ DataFrames. We wanted the graphs to be more interactive and as a result had to use \verb+Tkinter+ in combination with \verb+matplotlib+ to show our visual representations and compare the crime data with the COVID data. Throughout the process, in fact, we realized that some of the libraries that we initially planned to use did not have all of the functionality necessary, and as a result had to continuously update our plan with new libraries such as \verb+Tkinter+ and \verb+numpy+. We also realized that what we really wanted to compare between the two datasets was the change in new COVID cases per month as related to the crime per month. As a result, we instead decided to look at the differences in the number of cases per month and compare those to the crime data.
