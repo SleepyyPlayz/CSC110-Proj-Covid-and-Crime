@@ -162,21 +162,25 @@ def covid_data_to_dict(data: list[read.CovidData], location: str) -> dict[str: l
     instances in data
 
     Preconditions:
-      - len(data) != 0
+      - len(data) >= 2
       - location in PROV_AND_TERR or location == 'Canada'
 
-    >>> covid_data1 = read.CovidData(datetime.date(2020, 1, 1), 'Ontario', 1, 1)
-    >>> expected = {'Date': [datetime.date(2020, 1, 1)], 'Number of Active Cases in Ontario': [1], \
-    'Number of Deaths in Ontario': [1]}
-    >>> covid_data_to_dict([covid_data1], 'Ontario') == expected
+    >>> covid_data1 = read.CovidData(datetime.date(2020, 1, 31), 'Ontario', 1, 1)
+    >>> covid_data2 = read.CovidData(datetime.date(2020, 2, 28), 'Ontario', 4, 8)
+    >>> expected = {'Date': [datetime.date(2020, 1, 31), [datetime.date(2020, 2, 28)]], \
+     'Number of New Active Cases in Ontario': [3], 'Number of New Deaths in Ontario': [7]}
+    >>> covid_data_to_dict([covid_data1, covid_data2], 'Ontario') == expected
     True
     """
-    dict_so_far = {'Date': [], f'Number of Active Cases in {location}': [], f'Number of Deaths in {location}': []}
+    dict_so_far = {'Date': [], f'Number of New Active Cases in {location}': [],
+                   f'Number of New Deaths in {location}': []}
 
-    for covid_data in data:
-        dict_so_far['Date'].append(covid_data.date)
-        dict_so_far[f'Number of Active Cases in {location}'].append(covid_data.get_num_active())
-        dict_so_far[f'Number of Deaths in {location}'].append(covid_data.get_num_deaths())
+    for i in range(len(data) - 1):
+        dict_so_far['Date'].append(data[i].date)
+        dict_so_far[f'Number of New Active Cases in {location}'].append(data[i + 1].get_num_active() -
+                                                                        data[i].get_num_active())
+        dict_so_far[f'Number of New Deaths in {location}'].append(data[i + 1].get_num_deaths() -
+                                                                  data[i].get_num_deaths())
 
     return dict_so_far
 
