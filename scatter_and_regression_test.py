@@ -8,10 +8,9 @@ Any reproduction of this code without permission from the authors is strictly pr
 This file is Copyright (c) 2021 Nicholas Poon, Raghav Srinivasan, Khushil Nagda, and Wangzheng Jiang.
 """
 
-# import tkinter as tk
-import dataframes as df
 import matplotlib.pyplot as plt
 import numpy as np
+import dataframes as df
 
 cases_20_21 = df.covid_data_canada_20_21_df['Number of New Active Cases in Canada']
 
