@@ -71,7 +71,19 @@ After downloading both files, they should be placed in a directory titled \verb+
 For the most part, we stuck to the project plan outlined in the proposal for the final submission. However, we did encounter some issues with graphing the data once we aggregated it into \verb+pandas+ DataFrames. We wanted the graphs to be more interactive and as a result had to use \verb+Tkinter+ in combination with \verb+matplotlib+ to show our visual representations and compare the crime data with the COVID data. We also realized that what we really wanted to compare between the two datasets was the change in new COVID cases per month as related to the crime per month. As a result, we instead decided to look at the differences in the number of cases per month and compare those to the crime data.
 
 \section{Discussion}
+Based on the scatter plots of the amount of different types of crime in relation to the number of covid cases, we successfully drew the following conclusions on the relationship between the COVID and crime situations in Canada: 
 
+(1) The total physical crime in Canada has a medium-strength negative correlation with the amount of covid cases. Which means as covid cases increase, the amount of physical crime in Canada decreases by a fair amount. This is likely due to people having less chances of physical contact while distancing restrictions are being enforced. This result is within our expectations.
+
+(2) The total non-physical crime in Canada has almost no correlation with the amount of covid cases. Which means as covid cases increase, the amount of non-physical crime in Canada is not affected. This is likely due to distancing restrictions having little to no effect on people's willingness and capability of committing crimes that require no physical contact. This result is within our expectations.
+
+(3) The total public crime (i.e. crimes committed in public, or to strangers) in Canada has a low-strength negative correlation with the amount of covid cases. Which means as covid cases increase, the amount of public crime in Canada decreases somewhat. This is likely due to people having less chances of interacting with strangers while distancing restrictions are being enforced. This result is within our expectations.
+
+(4) The total private crime (i.e. crimes committed in private, or to victims that know the perpetrator) in Canada actually has a medium-strength negative correlation with the amount of covid cases. Which means as covid cases increase, the amount of private crime in Canada decreases by a fair amount. This result falls out of our expectations and needs to be further examined.
+
+During this project, we've encountered numerous obstacles, especially when filtering and cleaning the data sets that we have and transforming it into data types that we can use for analysis. The fact that the two data sets that we used recorded their data so differently meant that we had to keep track of many details to guarantee that the final Data Frames contain the correct data. Keeping track of the many helper functions and what they do respectively was also a great challenge. In addition, when it comes to displaying our data visually, we had no experience with doing so previously, so we had to learn by experience and experimentation, trial and error, which took a substantial amount of time.
+
+The next step for our project is to figure out why the amount of private crime in Canada has a negative correlation with the amount of covid cases. It would also be better if we were to separate each province/territory out and analyze them separately, to see if the specific circumstances in each province/territory have impacts on relations between COVID and crime there specifically. 
 
 \begin{thebibliography}{9}
 	\bibitem{crime}
