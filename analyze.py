@@ -1,10 +1,8 @@
 """
 Copyright and Usage Information
 ===============================
-
 This file was created for a final project for the University of Toronto Computer Science Course CSC110.
 Any reproduction of this code without permission from the authors is strictly prohibited.
-
 This file is Copyright (c) 2021 Nicholas Poon, Raghav Srinivasan, Khushil Nagda, and Wangzheng Jiang.
 """
 import datetime
@@ -23,10 +21,8 @@ PUBLIC = {'public', 'non-family', 'unknown', 'non-residential', 'mental health a
 
 def filter_just_crimes(data: list[read.EmergencyCall]) -> list[read.EmergencyCall]:
     """Returns list of EmergencyCall instances that are crimes, with other types of emergencies omitted
-
     Preconditions:
       - len(data) != 0
-
     >>> call1 = read.EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 34)
     >>> call2 = read.EmergencyCall(datetime.date(2020, 2, 29), 'Ontario', \
@@ -49,12 +45,10 @@ def filter_crimes_by_type(data: list[read.EmergencyCall], filter_type: str) -> \
         tuple[list[read.EmergencyCall], list[read.EmergencyCall]]:
     """Return tuple that contains lists of EmergencyCall instances, one selecting for the filter_type
     and one against the filter_type.
-
     Preconditions:
       - data contains only crimes, with other types of emergencies omitted
       - len(data) != 0
       - filter_type == 'public' or filter_type == 'physical'
-
     >>> call1 = read.EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 34)
     >>> call2 = read.EmergencyCall(datetime.date(2020, 2, 29), 'Ontario', \
@@ -88,12 +82,10 @@ def filter_crimes_by_type(data: list[read.EmergencyCall], filter_type: str) -> \
 
 def filter_crimes_by_location(data: list[read.EmergencyCall], location: str, year: int) -> list[read.EmergencyCall]:
     """Return a new list of EmergencyCall with only data corresponding to year for location
-
     Preconditions:
       - len(data) != 0
       - location in PROV_AND_TERR or location == "Canada"
       - year >= 0
-
     >>> call1 = read.EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 34)
     >>> call2 = read.EmergencyCall(datetime.date(2020, 1, 31), 'Ontario', \
@@ -113,12 +105,10 @@ def filter_crimes_by_location(data: list[read.EmergencyCall], location: str, yea
 def get_monthly_cases(data: list[read.CovidData], year: int, location: str) -> list[read.CovidData]:
     """Return a list of CovidData with only the data for the last day of each month for a particular year for a
     particular location
-
     Preconditions:
       - len(data) != 0
       - year >= 0
       - location in PROV_AND_TERR or location == 'Canada'
-
     >>> covid_data1 = read.CovidData(datetime.date(2020, 1, 31), 'Ontario', 1, 1)
     >>> covid_data2 = read.CovidData(datetime.date(2020, 2, 29), 'Ontario', 1, 1)
     >>> covid_data3 = read.CovidData(datetime.date(2020, 1, 29), 'Ontario', 1, 1)
@@ -139,7 +129,6 @@ def get_monthly_cases(data: list[read.CovidData], year: int, location: str) -> l
 
 def check_if_monthly_case(covid_data: read.CovidData) -> bool:
     """Return whether the CovidData instance is data for the last day of any month.
-
     >>> covid_data1 = read.CovidData(datetime.date(2020, 1, 31), 'Ontario', 1, 1)
     >>> check_if_monthly_case(covid_data1)
     True
@@ -160,23 +149,25 @@ def check_if_monthly_case(covid_data: read.CovidData) -> bool:
 def covid_data_to_dict(data: list[read.CovidData], location: str) -> dict[str: list]:
     """Return a dictionary mapping relevant attributes of CovidData to a list of attributes for all the CovidData
     instances in data
-
     Preconditions:
-      - len(data) != 0
+      - len(data) >= 2
       - location in PROV_AND_TERR or location == 'Canada'
-
-    >>> covid_data1 = read.CovidData(datetime.date(2020, 1, 1), 'Ontario', 1, 1)
-    >>> expected = {'Date': [datetime.date(2020, 1, 1)], 'Number of Active Cases in Ontario': [1], \
-    'Number of Deaths in Ontario': [1]}
-    >>> covid_data_to_dict([covid_data1], 'Ontario') == expected
+    >>> covid_data1 = read.CovidData(datetime.date(2020, 1, 31), 'Ontario', 1, 1)
+    >>> covid_data2 = read.CovidData(datetime.date(2020, 2, 28), 'Ontario', 4, 8)
+    >>> expected = {'Date': [datetime.date(2020, 1, 31), [datetime.date(2020, 2, 28)]], \
+     'Number of New Active Cases in Ontario': [3], 'Number of New Deaths in Ontario': [7]}
+    >>> covid_data_to_dict([covid_data1, covid_data2], 'Ontario') == expected
     True
     """
-    dict_so_far = {'Date': [], f'Number of Active Cases in {location}': [], f'Number of Deaths in {location}': []}
+    dict_so_far = {'Date': [], f'Number of New Active Cases in {location}': [],
+                   f'Number of New Deaths in {location}': []}
 
-    for covid_data in data:
-        dict_so_far['Date'].append(covid_data.date)
-        dict_so_far[f'Number of Active Cases in {location}'].append(covid_data.get_num_active())
-        dict_so_far[f'Number of Deaths in {location}'].append(covid_data.get_num_deaths())
+    for i in range(len(data) - 1):
+        dict_so_far['Date'].append(data[i].date)
+        dict_so_far[f'Number of New Active Cases in {location}'].append(data[i + 1].get_num_active() -
+                                                                        data[i].get_num_active())
+        dict_so_far[f'Number of New Deaths in {location}'].append(data[i + 1].get_num_deaths() -
+                                                                  data[i].get_num_deaths())
 
     return dict_so_far
 
@@ -184,10 +175,8 @@ def covid_data_to_dict(data: list[read.CovidData], location: str) -> dict[str: l
 def emergency_call_to_dict(data: list[read.EmergencyCall]) -> dict[str, list]:
     """Return a dictionary mapping the relevant attributes of EmergencyCall to a list of attributes for all the
     EmergencyCall instances in data
-
     Preconditions:
       - len(data) != 0
-
     >>> call1 = read.EmergencyCall(datetime.date(2020, 1, 1), 'Ontario', \
     'Impaired driving, causing death or bodily harm [921]', 1)
     >>> expected = {'Date': [datetime.date(2020, 1, 1)], \
@@ -210,7 +199,6 @@ def get_police_data(data: list[read.EmergencyCall], location: str, year: int, ca
     """Return a tuple of 2 dictionaries. The first dictionary contains the yearly crime, in a particular
     category, for location during year. The second dictionary contains the yearly crime, in the opposite of the
     category, for location during year.
-
     Preconditions:
       - len(data) != 0
       - location in PROV_AND_TERR or location == 'Canada'
@@ -229,7 +217,6 @@ def get_police_data(data: list[read.EmergencyCall], location: str, year: int, ca
 def get_police_data_totals(data_dict: dict[str, list], category: str, year: int, location: str) -> dict[str, list]:
     """Return a new dictionary with the only keys being the date and total category. For the values for total category,
     add all instances of category for each month
-
     Preconditions:
       - len(data_dict) != 0
       - category in {'Physical', 'Non Physical', 'Public', 'Private'}
@@ -254,7 +241,6 @@ def get_police_data_totals(data_dict: dict[str, list], category: str, year: int,
 
 def get_covid_data(data: list[read.CovidData], location: str, year: int) -> dict[str, list]:
     """Return a dictionary of the covid data on the last day of each month for a specific year at a specific location
-
     Preconditions:
       - len(data) != 0
       - location in PROV_AND_TERR or location == 'Canada'
