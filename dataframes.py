@@ -118,15 +118,15 @@ for pt in read.PROV_AND_TERR:
 # Covid Data Frame for Canada for 2020
 covid_data_canada_2020_df = pd.DataFrame(covid_data_canada_2020)
 
+# Covid Data Frame for Canada for 2021
+covid_data_canada_2021_df = pd.DataFrame(covid_data_canada_2021)
+
 # Creating a list of Covid Data Frames for Each Province for Covid Data 2020,
 df_list_per_province_covid_data_2020 = []
 for pt in read.PROV_AND_TERR:
     covid_data_2020 = analyze.get_covid_data(COVID_DATA_RAW, pt, 2020)
     covid_data_2020_df = pd.DataFrame(covid_data_2020)
     df_list_per_province_covid_data_2020.append(covid_data_2020_df)
-
-# Covid Data Frame for Canada for 2021
-covid_data_canada_2021_df = pd.DataFrame(covid_data_canada_2021)
 
 # Creating a list of Covid Data Frames for Each Province for Covid Data 2021,
 df_list_per_province_covid_data_2021 = []
@@ -213,8 +213,12 @@ for pt in read.PROV_AND_TERR:
     df_list_per_province_total_police_data_2021_public.append(total_police_data_2021_public_df)
     df_list_per_province_total_police_data_2021_private.append(total_police_data_2021_private_df)
 
+# ------------------------------  COMBINING THE CANADA COVID DATA FRAME ------------------------- #
+covid_data_canada_20_21_df = covid_data_canada_2020_df.append(covid_data_canada_2021_df)
+
+
+
 # ------------------------------  COMBINING THE PROVINCE DATA FRAMES----------------------------- #
-# result = pd.merge(left, right, on="key")
 
 # ------------------------------  COVID DATASET --------------------------------- #
 
@@ -294,7 +298,9 @@ for df in df_list_per_province_total_police_data_2021_private[1:]:
 
 if __name__ == '__main__':
     from pprint import pprint
-    pprint(total_police_data_canada_2020_physical_df)
+    pprint(covid_data_canada_20_21_df.tail())
+    pprint(covid_data_canada_20_21_df.info())
+
     # pprint(covid_data_canada_2020)
     # pprint(police_data_canada_2020_physical)
     # pprint(total_police_data_canada_2020_physical)
