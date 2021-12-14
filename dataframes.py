@@ -295,6 +295,22 @@ for df in df_list_per_province_total_police_data_2021_private[1:]:
         pd.merge(final_df_list_per_province_total_police_data_2021_private, df, on="Date")
 
 # ------------------------- 2020 AND 2021 CRIME DATA FRAMES COMBINED ---------------------------- #
+total_police_data_canada_20_21_physical_df = total_police_data_canada_2020_physical_df.append(
+    total_police_data_canada_2021_physical_df
+)
+
+total_police_data_canada_20_21_non_physical_df = total_police_data_canada_2020_non_physical_df.append(
+    total_police_data_canada_2021_non_physical_df
+)
+
+total_police_data_canada_20_21_public_df = total_police_data_canada_2020_public_df.append(
+    total_police_data_canada_2021_public_df
+)
+
+total_police_data_canada_20_21_private_df = total_police_data_canada_2020_private_df.append(
+    total_police_data_canada_2021_private_df
+)
+
 final_df_per_province_total_police_data_20_21_physical = \
     final_df_list_per_province_total_police_data_2020_physical.append(
         final_df_list_per_province_total_police_data_2021_physical)
@@ -315,9 +331,9 @@ final_df_per_province_total_police_data_20_21_private = \
 
 if __name__ == '__main__':
     from pprint import pprint
-    pprint(final_df_per_province_total_police_data_20_21_private.head())
-    pprint(final_df_per_province_total_police_data_20_21_private.tail())
-    pprint(final_df_per_province_total_police_data_20_21_private.info())
+    pprint(total_police_data_canada_20_21_private_df.head())
+    pprint(total_police_data_canada_20_21_private_df.tail())
+    pprint(total_police_data_canada_20_21_private_df.info())
 
     # pprint(covid_data_canada_2020)
     # pprint(police_data_canada_2020_physical)
