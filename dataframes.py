@@ -331,9 +331,10 @@ final_df_per_province_total_police_data_20_21_private = \
 
 if __name__ == '__main__':
     from pprint import pprint
-    pprint(total_police_data_canada_20_21_private_df.head())
-    pprint(total_police_data_canada_20_21_private_df.tail())
-    pprint(total_police_data_canada_20_21_private_df.info())
+    pprint(covid_data_canada_20_21_df)
+    pprint(covid_data_canada_20_21_df.info())
+    #pprint(total_police_data_canada_20_21_private_df.tail())
+    #pprint(total_police_data_canada_20_21_private_df.info())
 
     # pprint(covid_data_canada_2020)
     # pprint(police_data_canada_2020_physical)
