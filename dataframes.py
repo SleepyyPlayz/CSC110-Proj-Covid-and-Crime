@@ -7,11 +7,8 @@ Any reproduction of this code without permission from the authors is strictly pr
 
 This file is Copyright (c) 2021 Nicholas Poon, Raghav Srinivasan, Khushil Nagda, and Wangzheng Jiang.
 """
-import matplotlib as plt
 import pandas as pd
-import statsmodels
 
-from pprint import pprint
 import read
 import analyze
 
@@ -216,10 +213,6 @@ for pt in read.PROV_AND_TERR:
 # ------------------------------  COMBINING THE CANADA COVID DATA FRAME ------------------------- #
 covid_data_canada_20_21_df = covid_data_canada_2020_df.append(covid_data_canada_2021_df)
 
-
-
-# ------------------------------  COMBINING THE PROVINCE DATA FRAMES----------------------------- #
-
 # ------------------------------  COVID DATASET --------------------------------- #
 
 # Creating a combined Covid Data Frame for Each Province for Covid Data 2020,
@@ -326,16 +319,3 @@ final_df_per_province_total_police_data_20_21_public = \
 final_df_per_province_total_police_data_20_21_private = \
     final_df_list_per_province_total_police_data_2020_private.append(
         final_df_list_per_province_total_police_data_2021_private)
-
-# ------------------------------------- MAIN RUNNING SECTION --------------------------------- #
-
-if __name__ == '__main__':
-    from pprint import pprint
-    pprint(covid_data_canada_20_21_df)
-    pprint(covid_data_canada_20_21_df.info())
-    #pprint(total_police_data_canada_20_21_private_df.tail())
-    #pprint(total_police_data_canada_20_21_private_df.info())
-
-    # pprint(covid_data_canada_2020)
-    # pprint(police_data_canada_2020_physical)
-    # pprint(total_police_data_canada_2020_physical)

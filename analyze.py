@@ -166,8 +166,8 @@ def covid_data_to_dict(data: list[read.CovidData], location: str) -> dict[str: l
       - location in PROV_AND_TERR or location == 'Canada'
 
     >>> covid_data1 = read.CovidData(datetime.date(2020, 1, 31), 'Ontario', 1, 1)
-    >>> covid_data2 = read.CovidData(datetime.date(2020, 2, 28), 'Ontario', 4, 8)
-    >>> expected = {'Date': [datetime.date(2020, 1, 31), [datetime.date(2020, 2, 28)]], \
+    >>> covid_data2 = read.CovidData(datetime.date(2020, 2, 29), 'Ontario', 4, 8)
+    >>> expected = {'Date': [datetime.date(2020, 1, 31)], \
      'Number of New Active Cases in Ontario': [3], 'Number of New Deaths in Ontario': [7]}
     >>> covid_data_to_dict([covid_data1, covid_data2], 'Ontario') == expected
     True
@@ -177,10 +177,10 @@ def covid_data_to_dict(data: list[read.CovidData], location: str) -> dict[str: l
 
     for i in range(len(data) - 1):
         dict_so_far['Date'].append(data[i].date)
-        dict_so_far[f'Number of New Active Cases in {location}'].append(data[i + 1].get_num_active() -
-                                                                        data[i].get_num_active())
-        dict_so_far[f'Number of New Deaths in {location}'].append(data[i + 1].get_num_deaths() -
-                                                                  data[i].get_num_deaths())
+        dict_so_far[f'Number of New Active Cases in {location}'].append(data[i + 1].get_num_active()
+                                                                        - data[i].get_num_active())
+        dict_so_far[f'Number of New Deaths in {location}'].append(data[i + 1].get_num_deaths()
+                                                                  - data[i].get_num_deaths())
 
     return dict_so_far
 
@@ -267,18 +267,3 @@ def get_covid_data(data: list[read.CovidData], location: str, year: int) -> dict
     covid_in_location = get_monthly_cases(data, year, location)
 
     return covid_data_to_dict(covid_in_location, location)
-
-
-# if __name__ == '__main__':
-#     import python_ta
-#     import python_ta.contracts
-#
-#     python_ta.contracts.DEBUG_CONTRACTS = False
-#     python_ta.contracts.check_all_contracts()
-#
-#     python_ta.check_all(config={
-#         'extra-imports': ['read'],  # the names (strs) of imported modules
-#         'allowed-io': [],  # the names (strs) of functions that call print/open/input
-#         'max-line-length': 120,
-#         'disable': ['R1705', 'C0200']
-#     })
