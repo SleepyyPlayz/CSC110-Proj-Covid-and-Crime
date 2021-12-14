@@ -294,8 +294,7 @@ for df in df_list_per_province_total_police_data_2021_private[1:]:
 
 if __name__ == '__main__':
     from pprint import pprint
-    pprint(final_df_list_per_province_total_police_data_2021_private.head())
-    pprint(final_df_list_per_province_total_police_data_2021_private.info())
+    pprint(total_police_data_canada_2020_physical_df)
     # pprint(covid_data_canada_2020)
     # pprint(police_data_canada_2020_physical)
     # pprint(total_police_data_canada_2020_physical)
